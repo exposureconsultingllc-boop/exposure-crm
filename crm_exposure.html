@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exposure CRM — Agencia de Contenido</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --surface2: #f0efe9;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --text: #1a1916;
+  --text2: #6b6a65;
+  --text3: #9e9d97;
+  --accent: #2d6a4f;
+  --accent-bg: #d8f3dc;
+  --accent-text: #1b4332;
+  --amber: #e07b00;
+  --amber-bg: #fff3cd;
+  --amber-text: #7d4e00;
+  --blue: #1a56a0;
+  --blue-bg: #dbeafe;
+  --blue-text: #1e3a5f;
+  --red: #b91c1c;
+  --red-bg: #fee2e2;
+  --red-text: #7f1d1d;
+  --purple: #6d28d9;
+  --purple-bg: #ede9fe;
+  --purple-text: #4c1d95;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+}
+
+.logo-wrap {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-name {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.logo-tag {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+  font-family: 'DM Mono', monospace;
+}
+
+.nav-group {
+  padding: 16px 12px 4px;
+}
+
+.nav-group-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 0 8px;
+  margin-bottom: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13.5px;
+  color: var(--text2);
+  transition: all 0.12s;
+  user-select: none;
+}
+
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: var(--surface2); color: var(--text); font-weight: 500; }
+
+.nav-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border2);
+  flex-shrink: 0;
+}
+.nav-item.active .nav-dot { background: var(--accent); }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text3);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 36px;
+  max-width: 1100px;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+.page-header { margin-bottom: 28px; }
+.page-title { font-size: 22px; font-weight: 500; letter-spacing: -0.03em; color: var(--text); }
+.page-sub { font-size: 13px; color: var(--text3); margin-top: 4px; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* ── METRICS ── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.metric-label { font-size: 11px; color: var(--text3); margin-bottom: 8px; font-family: 'DM Mono', monospace; }
+.metric-value { font-size: 26px; font-weight: 300; letter-spacing: -0.03em; color: var(--text); }
+.metric-delta { font-size: 11px; margin-top: 6px; }
+.up { color: var(--accent); }
+.dn { color: var(--red); }
+
+/* ── GRID ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.three-col { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-bottom: 16px; }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-family: 'DM Mono', monospace;
+  white-space: nowrap;
+}
+.b-green { background: var(--accent-bg); color: var(--accent-text); }
+.b-amber { background: var(--amber-bg); color: var(--amber-text); }
+.b-blue { background: var(--blue-bg); color: var(--blue-text); }
+.b-red { background: var(--red-bg); color: var(--red-text); }
+.b-gray { background: var(--surface2); color: var(--text2); }
+.b-purple { background: var(--purple-bg); color: var(--purple-text); }
+
+/* ── TABLES ── */
+.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tbl th { font-size: 10px; font-weight: 500; color: var(--text3); text-align: left; padding: 0 0 10px; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase; }
+.tbl td { padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: var(--surface2); }
+
+/* ── FILTER TABS ── */
+.ftabs { display: flex; gap: 4px; }
+.ftab {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text2);
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  transition: all 0.1s;
+}
+.ftab:hover { background: var(--surface2); }
+.ftab.active { background: var(--text); color: var(--surface); border-color: var(--text); }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.1s;
+}
+.btn:hover { background: var(--surface2); }
+.btn-primary { background: var(--text); color: var(--surface); border-color: var(--text); }
+.btn-primary:hover { background: #333; }
+
+.add-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.inp {
+  flex: 1;
+  font-size: 13px;
+  padding: 8px 12px;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  color: var(--text);
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.inp:focus { border-color: var(--accent); background: var(--surface); }
+
+.sel {
+  font-size: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  color: var(--text);
+  outline: none;
+  font-family: 'DM Mono', monospace;
+  cursor: pointer;
+}
+
+/* ── TASKS ── */
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+  border-radius: var(--radius-sm);
+}
+.task-item:last-of-type { border-bottom: none; }
+.task-item:hover { background: var(--surface2); margin: 0 -8px; padding: 10px 8px; }
+
+.chk {
+  width: 18px; height: 18px;
+  min-width: 18px;
+  border-radius: 5px;
+  border: 1.5px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+.chk.done { background: var(--accent); border-color: var(--accent); }
+.chk.done::after {
+  content: '';
+  display: block;
+  width: 4px; height: 8px;
+  border: 1.5px solid white;
+  border-top: none; border-left: none;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.task-text { font-size: 13px; color: var(--text); line-height: 1.4; }
+.task-text.done { text-decoration: line-through; color: var(--text3); }
+
+/* ── PROGRESS ── */
+.prog-wrap { margin-bottom: 20px; }
+.prog-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-bottom: 6px; font-family: 'DM Mono', monospace; }
+.prog-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.4s; }
+
+/* ── PHASE TAGS ── */
+.phase-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── CALENDAR ── */
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; }
+.cal-header { font-size: 10px; color: var(--text3); text-align: center; padding: 4px 0; font-family: 'DM Mono', monospace; }
+.cal-day {
+  min-height: 64px;
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  font-size: 10px;
+}
+.cal-day-num { color: var(--text3); margin-bottom: 4px; font-family: 'DM Mono', monospace; }
+.cal-event {
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-bottom: 2px;
+  color: var(--text);
+  line-height: 1.3;
+  cursor: pointer;
+}
+.ev-reel { background: var(--blue-bg); }
+.ev-car { background: var(--accent-bg); }
+.ev-hist { background: var(--amber-bg); }
+
+/* ── AVATAR FIELDS ── */
+.av-field { margin-bottom: 12px; }
+.av-label { font-size: 10px; color: var(--text3); margin-bottom: 5px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.04em; }
+.av-val {
+  font-size: 13px;
+  color: var(--text);
+  background: var(--surface2);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  line-height: 1.5;
+}
+.av-inp {
+  width: 100%;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--surface2);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  resize: vertical;
+  min-height: 60px;
+}
+.av-inp:focus { border-color: var(--accent); background: var(--surface); }
+
+/* ── COMP ITEMS ── */
+.comp-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.comp-item:last-child { border-bottom: none; }
+.comp-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* ── STAT ROWS ── */
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-name { color: var(--text2); }
+.stat-val { font-weight: 500; color: var(--text); text-align: right; max-width: 55%; }
+
+/* ── CHART WRAP ── */
+.chart-wrap { position: relative; height: 200px; }
+
+/* ── MODAL ── */
+.modal-bg {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 480px;
+  max-width: 95vw;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.modal-title { font-size: 16px; font-weight: 500; margin-bottom: 16px; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+.modal-field { margin-bottom: 12px; }
+.modal-label { font-size: 11px; color: var(--text3); margin-bottom: 5px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--text);
+  color: var(--surface);
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.2s;
+  z-index: 200;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo-wrap">
+    <div class="logo-name">Exposure CRM</div>
+    <div class="logo-tag">agencia de contenido</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Principal</div>
+    <div class="nav-item active" onclick="nav('dashboard',this)"><div class="nav-dot"></div> Dashboard</div>
+    <div class="nav-item" onclick="nav('accionables',this)"><div class="nav-dot"></div> Accionables</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Agencia</div>
+    <div class="nav-item" onclick="nav('fundaciones',this)"><div class="nav-dot"></div> Fundaciones</div>
+    <div class="nav-item" onclick="nav('calendario',this)"><div class="nav-dot"></div> Contenido</div>
+    <div class="nav-item" onclick="nav('competencia',this)"><div class="nav-dot"></div> Competencia</div>
+    <div class="nav-item" onclick="nav('metricas',this)"><div class="nav-dot"></div> Métricas</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Ventas</div>
+    <div class="nav-item" onclick="nav('leads',this)"><div class="nav-dot"></div> Leads</div>
+    <div class="nav-item" onclick="nav('clientes',this)"><div class="nav-dot"></div> Clientes</div>
+    <div class="nav-item" onclick="nav('finanzas',this)"><div class="nav-dot"></div> Finanzas</div>
+  </div>
+
+  <div class="sidebar-footer">
+    datos guardados localmente<br>
+    v1.0 — Exposure Agency
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ═══════════════ DASHBOARD ═══════════════ -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">Resumen financiero de la agencia</div>
+        </div>
+        <div class="ftabs" id="dash-filter">
+          <button class="ftab" onclick="setDashFilter('dia',this)">Día</button>
+          <button class="ftab" onclick="setDashFilter('semana',this)">Semana</button>
+          <button class="ftab active" onclick="setDashFilter('mes',this)">Mes</button>
+          <button class="ftab" onclick="setDashFilter('año',this)">Año</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric">
+        <div class="metric-label">ingresos</div>
+        <div class="metric-value" id="m-ing">$0</div>
+        <div class="metric-delta up" id="md-ing"></div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">gastos</div>
+        <div class="metric-value" id="m-gas">$0</div>
+        <div class="metric-delta dn" id="md-gas"></div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">ganancia neta</div>
+        <div class="metric-value" id="m-net">$0</div>
+        <div class="metric-delta up"></div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">clientes activos</div>
+        <div class="metric-value" id="m-cli">0</div>
+        <div class="metric-delta up" id="md-cli"></div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Ingresos vs Gastos</div></div>
+        <div class="chart-wrap"><canvas id="chart-dash" role="img" aria-label="Gráfico ingresos y gastos">Comparativa ingresos y gastos.</canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Últimos movimientos</div>
+          <button class="btn" onclick="nav('finanzas',document.querySelector('[onclick*=finanzas]'))">Ver todos</button>
+        </div>
+        <table class="tbl" id="dash-movs">
+          <thead><tr><th>Concepto</th><th>Tipo</th><th>Monto</th></tr></thead>
+          <tbody id="dash-movs-body"><tr><td colspan="3" style="color:var(--text3);text-align:center;padding:20px 0">Sin movimientos registrados</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ ACCIONABLES ═══════════════ -->
+  <div class="page" id="page-accionables">
+    <div class="page-header">
+      <div class="page-title">Accionables</div>
+      <div class="page-sub">Roadmap de tareas — hacé clic para tachar lo que completaste</div>
+    </div>
+
+    <div class="three-col">
+      <div class="metric">
+        <div class="metric-label">completadas</div>
+        <div class="metric-value" id="ac-done">0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">pendientes</div>
+        <div class="metric-value" id="ac-pend">0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">progreso</div>
+        <div class="metric-value" id="ac-pct">0%</div>
+      </div>
+    </div>
+
+    <div class="prog-wrap">
+      <div class="prog-labels"><span>Progreso general</span><span id="ac-prog-label">0 / 0</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="ac-prog-bar" style="width:0%"></div></div>
+    </div>
+
+    <div id="phases-container"></div>
+  </div>
+
+  <!-- ═══════════════ FUNDACIONES ═══════════════ -->
+  <div class="page" id="page-fundaciones">
+    <div class="page-header">
+      <div class="page-title">Fundaciones</div>
+      <div class="page-sub">La base estratégica de tu agencia</div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Avatar ideal</div>
+            <button class="btn" onclick="saveFoundations()">Guardar</button>
+          </div>
+          <div class="av-field"><div class="av-label">Ocupación / Perfil</div><textarea class="av-inp" id="av-ocupacion" placeholder="Ej: Editores de video freelance, 22-35 años..."></textarea></div>
+          <div class="av-field"><div class="av-label">Problemas principales</div><textarea class="av-inp" id="av-problemas" placeholder="¿Qué le duele? ¿Qué lo frena?"></textarea></div>
+          <div class="av-field"><div class="av-label">Deseos principales</div><textarea class="av-inp" id="av-deseos" placeholder="¿Qué quiere lograr? ¿Cuál es su sueño?"></textarea></div>
+          <div class="av-field"><div class="av-label">Objeciones frecuentes</div><textarea class="av-inp" id="av-objeciones" placeholder="¿Qué dice para no comprar?"></textarea></div>
+          <div class="av-field"><div class="av-label">Ángulos de contenido</div><textarea class="av-inp" id="av-angulos" placeholder="Temas y enfoques que resuenan con el avatar..."></textarea></div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Oferta y servicio</div>
+            <button class="btn" onclick="saveFoundations()">Guardar</button>
+          </div>
+          <div class="av-field"><div class="av-label">Promesa principal (bio de IG)</div><textarea class="av-inp" id="av-promesa" placeholder="La promesa que va en tu descripción de Instagram..."></textarea></div>
+          <div class="av-field"><div class="av-label">Mecanismo único</div><textarea class="av-inp" id="av-mecanismo" placeholder="¿Qué hace diferente tu método?"></textarea></div>
+          <div class="av-field"><div class="av-label">Nicho específico</div><textarea class="av-inp" id="av-nicho" placeholder="A quién le hablás exactamente..."></textarea></div>
+          <div class="av-field"><div class="av-label">Precio y estructura de cobro</div><textarea class="av-inp" id="av-precio" placeholder="Ej: $900 USD/mes, cuota mensual, mínimo 3 meses..."></textarea></div>
+          <div class="av-field"><div class="av-label">Garantía</div><textarea class="av-inp" id="av-garantia" placeholder="Ej: Resultados o seguís gratis..."></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CONTENIDO ═══════════════ -->
+  <div class="page" id="page-calendario">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div class="page-title">Calendario de contenido</div>
+          <div class="page-sub" id="cal-month-label">Abril 2026</div>
+        </div>
+        <button class="btn btn-primary" onclick="openContentModal()">+ Nueva pieza</button>
+      </div>
+    </div>
+
+    <div class="ftabs" style="margin-bottom:16px" id="cal-filter">
+      <button class="ftab active" onclick="setCalFilter('todos',this)">Todos</button>
+      <button class="ftab" onclick="setCalFilter('Reel',this)">Reels</button>
+      <button class="ftab" onclick="setCalFilter('Carrusel',this)">Carrusels</button>
+      <button class="ftab" onclick="setCalFilter('Historia',this)">Historias</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">Esta semana</div></div>
+      <table class="tbl">
+        <thead><tr><th>Pieza</th><th>Tipo</th><th>Hook</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+        <tbody id="content-table-body"><tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin piezas. Agregá una con el botón.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ COMPETENCIA ═══════════════ -->
+  <div class="page" id="page-competencia">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div class="page-title">Competencia</div>
+          <div class="page-sub">Análisis de perfiles y estrategias del mercado</div>
+        </div>
+        <button class="btn btn-primary" onclick="openCompModal()">+ Agregar competidor</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div id="comp-list"><div style="color:var(--text3);text-align:center;padding:30px 0;font-size:13px">Sin competidores. Agregá uno con el botón.</div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ MÉTRICAS ═══════════════ -->
+  <div class="page" id="page-metricas">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div class="page-title">Métricas de contenido</div>
+          <div class="page-sub">Rendimiento por pieza — qué funciona y qué no</div>
+        </div>
+        <button class="btn btn-primary" onclick="openMetricModal()">+ Cargar métrica</button>
+      </div>
+    </div>
+
+    <div class="three-col" id="met-cards">
+      <div class="metric"><div class="metric-label">mejor alcance</div><div class="metric-value" id="met-top">—</div></div>
+      <div class="metric"><div class="metric-label">promedio engagement</div><div class="metric-value" id="met-eng">0%</div></div>
+      <div class="metric"><div class="metric-label">leads generados</div><div class="metric-value" id="met-leads">0</div></div>
+    </div>
+
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Pieza</th><th>Tipo</th><th>Alcance</th><th>Likes</th><th>Leads</th><th>Score</th></tr></thead>
+        <tbody id="met-table"><tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin métricas cargadas aún</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ LEADS ═══════════════ -->
+  <div class="page" id="page-leads">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div class="page-title">Pipeline de leads</div>
+          <div class="page-sub">Seguimiento de prospectos activos</div>
+        </div>
+        <button class="btn btn-primary" onclick="openLeadModal()">+ Nuevo lead</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Nombre</th><th>Origen</th><th>Estado</th><th>Última acción</th><th></th></tr></thead>
+        <tbody id="leads-table"><tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin leads. Agregá uno con el botón.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CLIENTES ═══════════════ -->
+  <div class="page" id="page-clientes">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div class="page-title">Clientes activos</div>
+          <div class="page-sub" id="cli-count-label">0 clientes en programa</div>
+        </div>
+        <button class="btn btn-primary" onclick="openClientModal()">+ Nuevo cliente</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Cliente</th><th>Inicio</th><th>Cuota</th><th>Próximo pago</th><th>Estado</th><th></th></tr></thead>
+        <tbody id="clients-table"><tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin clientes aún</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════ FINANZAS ═══════════════ -->
+  <div class="page" id="page-finanzas">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div class="page-title">Finanzas</div>
+          <div class="page-sub">Ingresos y gastos detallados</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" onclick="openIngModal()">+ Ingreso</button>
+          <button class="btn btn-primary" onclick="openGasModal()">+ Gasto</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Ingresos</div></div>
+        <table class="tbl">
+          <thead><tr><th>Concepto</th><th>Cliente</th><th>Monto</th><th>Fecha</th><th></th></tr></thead>
+          <tbody id="ing-table"><tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin ingresos</td></tr></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Gastos</div></div>
+        <table class="tbl">
+          <thead><tr><th>Concepto</th><th>Categoría</th><th>Monto</th><th>Fecha</th><th></th></tr></thead>
+          <tbody id="gas-table"><tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin gastos</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end main -->
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+
+<!-- Content Modal -->
+<div class="modal-bg" id="modal-content">
+  <div class="modal">
+    <div class="modal-title">Nueva pieza de contenido</div>
+    <div class="modal-field"><div class="modal-label">Título / Tema</div><input class="inp" id="mc-titulo" placeholder="De qué trata..." style="width:100%"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field"><div class="modal-label">Tipo</div>
+        <select class="sel" id="mc-tipo" style="width:100%"><option>Reel</option><option>Carrusel</option><option>Historia</option></select>
+      </div>
+      <div class="modal-field"><div class="modal-label">Estado</div>
+        <select class="sel" id="mc-estado" style="width:100%"><option>Idea</option><option>Guión listo</option><option>Grabando</option><option>Editando</option><option>Subido</option></select>
+      </div>
+    </div>
+    <div class="modal-field"><div class="modal-label">Hook</div><input class="inp" id="mc-hook" placeholder="Primera frase gancho..." style="width:100%"></div>
+    <div class="modal-field"><div class="modal-label">Ángulo</div><input class="inp" id="mc-angulo" placeholder="El ángulo de este contenido..." style="width:100%"></div>
+    <div class="modal-field"><div class="modal-label">Fecha de publicación</div><input class="inp" type="date" id="mc-fecha" style="width:100%"></div>
+    <div class="modal-field"><div class="modal-label">Guión / Copy</div><textarea class="av-inp" id="mc-guion" placeholder="El guión completo..." style="min-height:80px"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-content')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveContent()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Competitor Modal -->
+<div class="modal-bg" id="modal-comp">
+  <div class="modal">
+    <div class="modal-title">Agregar competidor</div>
+    <div class="modal-field"><div class="modal-label">Nombre / Handle</div><input class="inp" id="comp-nombre" placeholder="@handle" style="width:100%"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field"><div class="modal-label">Link Instagram</div><input class="inp" id="comp-ig" placeholder="instagram.com/..." style="width:100%"></div>
+      <div class="modal-field"><div class="modal-label">Seguidores</div><input class="inp" type="number" id="comp-segs" placeholder="0" style="width:100%"></div>
+    </div>
+    <div class="modal-field"><div class="modal-label">Nicho</div><input class="inp" id="comp-nicho" placeholder="A qué nicho apunta..." style="width:100%"></div>
+    <div class="modal-field"><div class="modal-label">Oferta principal</div><input class="inp" id="comp-oferta" placeholder="Qué vende..." style="width:100%"></div>
+    <div class="modal-field"><div class="modal-label">Puntos fuertes</div><textarea class="av-inp" id="comp-fuertes" placeholder="En qué es bueno..." style="min-height:60px"></textarea></div>
+    <div class="modal-field"><div class="modal-label">Gaps / Oportunidades</div><textarea class="av-inp" id="comp-gaps" placeholder="En qué falla, qué podés hacer mejor..." style="min-height:60px"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-comp')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveComp()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Metric Modal -->
+<div class="modal-bg" id="modal-metric">
+  <div class="modal">
+    <div class="modal-title">Cargar métrica</div>
+    <div class="modal-field"><div class="modal-label">Título del contenido</div><input class="inp" id="met-titulo" placeholder="Nombre de la pieza..." style="width:100%"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field"><div class="modal-label">Tipo</div><select class="sel" id="met-tipo" style="width:100%"><option>Reel</option><option>Carrusel</option><option>Historia</option></select></div>
+      <div class="modal-field"><div class="modal-label">Alcance</div><input class="inp" type="number" id="met-alcance" placeholder="0" style="width:100%"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div class="modal-field"><div class="modal-label">Likes</div><input class="inp" type="number" id="met-likes" placeholder="0" style="width:100%"></div>
+      <div class="modal-field"><div class="modal-label">Comentarios</div><input class="inp" type="number" id="met-comments" placeholder="0" style="width:100%"></div>
+      <div class="modal-field"><div class="modal-label">Leads</div><input class="inp" type="number" id="met-leads-inp" placeholder="0" style="width:100%"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-metric')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveMetric()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lead Modal -->
+<div class="modal-bg" id="modal-lead">
+  <div class="modal">
+    <div class="modal-title">Nuevo lead</div>
+    <div class="modal-field"><div class="modal-label">Nombre</div><input class="inp" id="lead-nombre" placeholder="Nombre del prospecto..." style="width:100%"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field"><div class="modal-label">Origen</div>
+        <select class="sel" id="lead-origen" style="width:100%"><option>Instagram DM</option><option>Referido</option><option>Reel viral</option><option>Historia</option><option>Otro</option></select>
+      </div>
+      <div class="modal-field"><div class="modal-label">Estado</div>
+        <select class="sel" id="lead-estado" style="width:100%"><option>Nuevo</option><option>Contactado</option><option>Llamada agendada</option><option>Propuesta enviada</option><option>Cerrado</option><option>Perdido</option></select>
+      </div>
+    </div>
+    <div class="modal-field"><div class="modal-label">Última acción</div><input class="inp" id="lead-accion" placeholder="Qué hiciste con este lead..." style="width:100%"></div>
+    <div class="modal-field"><div class="modal-label">Notas</div><textarea class="av-inp" id="lead-notas" placeholder="Info adicional del lead..." style="min-height:60px"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-lead')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveLead()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Client Modal -->
+<div class="modal-bg" id="modal-client">
+  <div class="modal">
+    <div class="modal-title">Nuevo cliente</div>
+    <div class="modal-field"><div class="modal-label">Nombre</div><input class="inp" id="cli-nombre" placeholder="Nombre del cliente..." style="width:100%"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field"><div class="modal-label">Fecha de inicio</div><input class="inp" type="date" id="cli-inicio" style="width:100%"></div>
+      <div class="modal-field"><div class="modal-label">Cuota mensual (USD)</div><input class="inp" type="number" id="cli-cuota" placeholder="900" style="width:100%"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field"><div class="modal-label">Próximo pago</div><input class="inp" type="date" id="cli-proxpago" style="width:100%"></div>
+      <div class="modal-field"><div class="modal-label">Estado</div>
+        <select class="sel" id="cli-estado" style="width:100%"><option>Al día</option><option>Pendiente</option><option>Vencido</option><option>Inactivo</option></select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-client')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveClient()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Ingreso Modal -->
+<div class="modal-bg" id="modal-ing">
+  <div class="modal">
+    <div class="modal-title">Nuevo ingreso</div>
+    <div class="modal-field"><div class="modal-label">Concepto</div><input class="inp" id="ing-concepto" placeholder="Ej: Cuota mensual Franco..." style="width:100%"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field"><div class="modal-label">Monto (USD)</div><input class="inp" type="number" id="ing-monto" placeholder="0" style="width:100%"></div>
+      <div class="modal-field"><div class="modal-label">Fecha</div><input class="inp" type="date" id="ing-fecha" style="width:100%"></div>
+    </div>
+    <div class="modal-field"><div class="modal-label">Cliente</div><input class="inp" id="ing-cliente" placeholder="Nombre del cliente..." style="width:100%"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-ing')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveIngreso()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Gasto Modal -->
+<div class="modal-bg" id="modal-gas">
+  <div class="modal">
+    <div class="modal-title">Nuevo gasto</div>
+    <div class="modal-field"><div class="modal-label">Concepto</div><input class="inp" id="gas-concepto" placeholder="Ej: CapCut Pro..." style="width:100%"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-field"><div class="modal-label">Monto (USD)</div><input class="inp" type="number" id="gas-monto" placeholder="0" style="width:100%"></div>
+      <div class="modal-field"><div class="modal-label">Fecha</div><input class="inp" type="date" id="gas-fecha" style="width:100%"></div>
+    </div>
+    <div class="modal-field"><div class="modal-label">Categoría</div>
+      <select class="sel" id="gas-cat" style="width:100%"><option>Software</option><option>Publicidad</option><option>Equipo humano</option><option>Hardware</option><option>Formación</option><option>Impuestos</option><option>Otro</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-gas')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveGasto()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════ STATE ═══════════════
+const KEYS = {
+  tasks: 'exp_tasks',
+  foundations: 'exp_foundations',
+  content: 'exp_content',
+  competitors: 'exp_competitors',
+  metrics: 'exp_metrics',
+  leads: 'exp_leads',
+  clients: 'exp_clients',
+  ingresos: 'exp_ingresos',
+  gastos: 'exp_gastos',
+};
+
+function load(key, def) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; }
+}
+function save(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+}
+
+const INIT_TASKS = {
+  f1: {
+    label: 'Fase 1 — Fundaciones', color: 'b-blue',
+    phase_style: 'background:var(--blue-bg);color:var(--blue-text)',
+    items: [
+      {t:'Completar el perfil del avatar ideal', p:'alta', done:false},
+      {t:'Escribir la promesa principal de la oferta', p:'alta', done:false},
+      {t:'Documentar precio y estructura de cobro', p:'alta', done:false},
+      {t:'Definir nicho y sub-nicho específico', p:'media', done:false},
+      {t:'Armar librería de ángulos de contenido', p:'media', done:false},
+    ]
+  },
+  f2: {
+    label: 'Fase 2 — Contenido', color: 'b-amber',
+    phase_style: 'background:var(--amber-bg);color:var(--amber-text)',
+    items: [
+      {t:'Grabar 4 reels de la semana', p:'alta', done:false},
+      {t:'Publicar 2 carrusels esta semana', p:'alta', done:false},
+      {t:'Analizar métricas del mes anterior', p:'media', done:false},
+      {t:'Preparar hooks para próximo mes', p:'media', done:false},
+      {t:'Documentar caso de éxito de cliente', p:'baja', done:false},
+    ]
+  },
+  f3: {
+    label: 'Fase 3 — Ventas', color: 'b-green',
+    phase_style: 'background:var(--accent-bg);color:var(--accent-text)',
+    items: [
+      {t:'Agendar 5 llamadas de ventas esta semana', p:'alta', done:false},
+      {t:'Follow-up a leads sin respuesta', p:'alta', done:false},
+      {t:'Optimizar guión de cierre', p:'media', done:false},
+      {t:'Configurar respuestas automáticas en IG', p:'baja', done:false},
+    ]
+  },
+  f4: {
+    label: 'Fase 4 — Escala', color: 'b-purple',
+    phase_style: 'background:var(--purple-bg);color:var(--purple-text)',
+    items: [
+      {t:'Conectar Calendly con WhatsApp vía Zapier', p:'alta', done:false},
+      {t:'Automatizar notificaciones de nuevas llamadas', p:'alta', done:false},
+      {t:'Armar SOP de onboarding de clientes', p:'media', done:false},
+      {t:'Contratar editor de confianza', p:'media', done:false},
+      {t:'Crear reporte mensual para clientes', p:'baja', done:false},
+    ]
+  }
+};
+
+let state = {
+  tasks: load(KEYS.tasks, JSON.parse(JSON.stringify(INIT_TASKS))),
+  foundations: load(KEYS.foundations, {}),
+  content: load(KEYS.content, []),
+  competitors: load(KEYS.competitors, []),
+  metrics: load(KEYS.metrics, []),
+  leads: load(KEYS.leads, []),
+  clients: load(KEYS.clients, []),
+  ingresos: load(KEYS.ingresos, []),
+  gastos: load(KEYS.gastos, []),
+};
+
+let dashChart = null;
+let dashFilter = 'mes';
+let calFilter = 'todos';
+
+// ═══════════════ NAV ═══════════════
+function nav(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'accionables') renderTasks();
+  if (id === 'fundaciones') renderFoundations();
+  if (id === 'calendario') renderContent();
+  if (id === 'competencia') renderCompetitors();
+  if (id === 'metricas') renderMetrics();
+  if (id === 'leads') renderLeads();
+  if (id === 'clientes') renderClients();
+  if (id === 'finanzas') renderFinanzas();
+}
+
+// ═══════════════ TOAST ═══════════════
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ═══════════════ MODALS ═══════════════
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+
+document.querySelectorAll('.modal-bg').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ═══════════════ DASHBOARD ═══════════════
+const dashData = {
+  dia:    { ing: 420, gas: 85, labels: ['9am','11am','1pm','3pm','5pm'], d_ing: [0,180,80,0,160], d_gas: [0,49,0,0,36] },
+  semana: { ing: 2100, gas: 380, labels: ['Lun','Mar','Mié','Jue','Vie'], d_ing: [900,0,600,0,600], d_gas: [65,0,180,0,135] },
+  mes:    { ing: 0, gas: 0, labels: ['Sem 1','Sem 2','Sem 3','Sem 4'], d_ing: [0,0,0,0], d_gas: [0,0,0,0] },
+  año:    { ing: 0, gas: 0, labels: ['Ene','Feb','Mar','Abr'], d_ing: [0,0,0,0], d_gas: [0,0,0,0] },
+};
+
+function setDashFilter(f, el) {
+  dashFilter = f;
+  document.querySelectorAll('#dash-filter .ftab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderDashboard();
+}
+
+function renderDashboard() {
+  const totalIng = state.ingresos.reduce((s,i) => s + Number(i.monto), 0);
+  const totalGas = state.gastos.reduce((s,g) => s + Number(g.monto), 0);
+  const activeCli = state.clients.filter(c => c.estado === 'Al día' || c.estado === 'Pendiente').length;
+
+  document.getElementById('m-ing').textContent = '$' + totalIng.toLocaleString();
+  document.getElementById('m-gas').textContent = '$' + totalGas.toLocaleString();
+  document.getElementById('m-net').textContent = '$' + (totalIng - totalGas).toLocaleString();
+  document.getElementById('m-cli').textContent = activeCli;
+
+  // chart
+  const d = dashData[dashFilter];
+  const ingArr = dashFilter === 'mes' || dashFilter === 'año'
+    ? d.labels.map(() => Math.round(totalIng / d.labels.length))
+    : d.d_ing;
+  const gasArr = dashFilter === 'mes' || dashFilter === 'año'
+    ? d.labels.map(() => Math.round(totalGas / d.labels.length))
+    : d.d_gas;
+
+  const ctx = document.getElementById('chart-dash');
+  if (dashChart) dashChart.destroy();
+  dashChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: d.labels,
+      datasets: [
+        { label: 'Ingresos', data: ingArr, backgroundColor: '#d8f3dc', borderRadius: 5 },
+        { label: 'Gastos', data: gasArr, backgroundColor: '#fee2e2', borderRadius: 5 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#9e9d97' } },
+        y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { font: { size: 11 }, color: '#9e9d97', callback: v => '$' + v } }
+      }
+    }
+  });
+
+  // movs
+  const allMovs = [
+    ...state.ingresos.map(i => ({ concepto: i.concepto, tipo: 'Ingreso', monto: '+$' + Number(i.monto).toLocaleString(), fecha: i.fecha })),
+    ...state.gastos.map(g => ({ concepto: g.concepto, tipo: 'Gasto', monto: '-$' + Number(g.monto).toLocaleString(), fecha: g.fecha }))
+  ].sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).slice(0, 6);
+
+  const tbody = document.getElementById('dash-movs-body');
+  if (allMovs.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="3" style="color:var(--text3);text-align:center;padding:20px 0">Sin movimientos. Agregá ingresos o gastos.</td></tr>';
+  } else {
+    tbody.innerHTML = allMovs.map(m => `
+      <tr>
+        <td>${m.concepto}</td>
+        <td><span class="badge ${m.tipo==='Ingreso'?'b-green':'b-red'}">${m.tipo}</span></td>
+        <td style="font-family:'DM Mono',monospace">${m.monto}</td>
+      </tr>`).join('');
+  }
+}
+
+// ═══════════════ ACCIONABLES ═══════════════
+function renderTasks() {
+  const container = document.getElementById('phases-container');
+  container.innerHTML = '';
+  let total = 0, done = 0;
+
+  Object.entries(state.tasks).forEach(([phaseKey, phase]) => {
+    const pDone = phase.items.filter(t => t.done).length;
+    total += phase.items.length;
+    done += pDone;
+
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="phase-tag" style="${phase.phase_style}">${phase.label}</div>
+          <div class="card-title" style="margin-top:2px">${pDone} de ${phase.items.length} completadas</div>
+        </div>
+        <span class="badge ${phase.color}">${pDone}/${phase.items.length}</span>
+      </div>
+      <div id="task-list-${phaseKey}"></div>
+      <div class="add-row">
+        <input class="inp" id="task-inp-${phaseKey}" placeholder="Nueva tarea...">
+        <select class="sel" id="task-pri-${phaseKey}"><option value="alta">Alta</option><option value="media" selected>Media</option><option value="baja">Baja</option></select>
+        <button class="btn btn-primary" onclick="addTask('${phaseKey}')">Agregar</button>
+      </div>`;
+    container.appendChild(div);
+
+    const list = document.getElementById('task-list-' + phaseKey);
+    phase.items.forEach((task, idx) => {
+      const item = document.createElement('div');
+      item.className = 'task-item';
+      item.onclick = () => toggleTask(phaseKey, idx);
+      item.innerHTML = `
+        <div class="chk ${task.done ? 'done' : ''}"></div>
+        <div>
+          <div class="task-text ${task.done ? 'done' : ''}">${task.t}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace">${task.p} prioridad</div>
+        </div>`;
+      list.appendChild(item);
+    });
+
+    document.getElementById('task-inp-' + phaseKey).addEventListener('keydown', e => {
+      if (e.key === 'Enter') addTask(phaseKey);
+    });
+  });
+
+  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+  document.getElementById('ac-done').textContent = done;
+  document.getElementById('ac-pend').textContent = total - done;
+  document.getElementById('ac-pct').textContent = pct + '%';
+  document.getElementById('ac-prog-bar').style.width = pct + '%';
+  document.getElementById('ac-prog-label').textContent = done + ' / ' + total;
+}
+
+function toggleTask(phaseKey, idx) {
+  state.tasks[phaseKey].items[idx].done = !state.tasks[phaseKey].items[idx].done;
+  save(KEYS.tasks, state.tasks);
+  renderTasks();
+}
+
+function addTask(phaseKey) {
+  const inp = document.getElementById('task-inp-' + phaseKey);
+  const pri = document.getElementById('task-pri-' + phaseKey);
+  const val = inp.value.trim();
+  if (!val) return;
+  state.tasks[phaseKey].items.push({ t: val, p: pri.value, done: false });
+  save(KEYS.tasks, state.tasks);
+  inp.value = '';
+  renderTasks();
+  toast('Tarea agregada');
+}
+
+// ═══════════════ FOUNDATIONS ═══════════════
+function renderFoundations() {
+  const f = state.foundations;
+  ['ocupacion','problemas','deseos','objeciones','angulos','promesa','mecanismo','nicho','precio','garantia'].forEach(k => {
+    const el = document.getElementById('av-' + k);
+    if (el && f[k]) el.value = f[k];
+  });
+}
+
+function saveFoundations() {
+  ['ocupacion','problemas','deseos','objeciones','angulos','promesa','mecanismo','nicho','precio','garantia'].forEach(k => {
+    const el = document.getElementById('av-' + k);
+    if (el) state.foundations[k] = el.value;
+  });
+  save(KEYS.foundations, state.foundations);
+  toast('Fundaciones guardadas');
+}
+
+// ═══════════════ CONTENT ═══════════════
+function openContentModal() {
+  document.getElementById('mc-fecha').value = new Date().toISOString().split('T')[0];
+  openModal('modal-content');
+}
+
+function saveContent() {
+  const item = {
+    id: Date.now(),
+    titulo: document.getElementById('mc-titulo').value.trim(),
+    tipo: document.getElementById('mc-tipo').value,
+    estado: document.getElementById('mc-estado').value,
+    hook: document.getElementById('mc-hook').value.trim(),
+    angulo: document.getElementById('mc-angulo').value.trim(),
+    fecha: document.getElementById('mc-fecha').value,
+    guion: document.getElementById('mc-guion').value.trim(),
+  };
+  if (!item.titulo) return;
+  state.content.push(item);
+  save(KEYS.content, state.content);
+  closeModal('modal-content');
+  document.getElementById('mc-titulo').value = '';
+  document.getElementById('mc-hook').value = '';
+  document.getElementById('mc-angulo').value = '';
+  document.getElementById('mc-guion').value = '';
+  renderContent();
+  toast('Pieza agregada');
+}
+
+function setCalFilter(f, el) {
+  calFilter = f;
+  document.querySelectorAll('#cal-filter .ftab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderContent();
+}
+
+function renderContent() {
+  const filtered = calFilter === 'todos' ? state.content : state.content.filter(c => c.tipo === calFilter);
+  const stateColors = { 'Idea':'b-gray','Guión listo':'b-blue','Grabando':'b-amber','Editando':'b-amber','Subido':'b-green' };
+  const body = document.getElementById('content-table-body');
+  if (filtered.length === 0) {
+    body.innerHTML = '<tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin piezas. Agregá una con el botón.</td></tr>';
+    return;
+  }
+  body.innerHTML = filtered.sort((a,b) => new Date(a.fecha) - new Date(b.fecha)).map((c,i) => `
+    <tr>
+      <td style="font-weight:500">${c.titulo}</td>
+      <td><span class="badge b-blue">${c.tipo}</span></td>
+      <td style="color:var(--text2);font-size:12px;max-width:200px">${c.hook || '—'}</td>
+      <td><span class="badge ${stateColors[c.estado]||'b-gray'}">${c.estado}</span></td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px">${c.fecha || '—'}</td>
+      <td><button class="btn" onclick="deleteItem('content',${i})" style="font-size:10px;padding:3px 8px;color:var(--red)">×</button></td>
+    </tr>`).join('');
+}
+
+// ═══════════════ COMPETITORS ═══════════════
+function openCompModal() { openModal('modal-comp'); }
+
+function saveComp() {
+  const item = {
+    nombre: document.getElementById('comp-nombre').value.trim(),
+    ig: document.getElementById('comp-ig').value.trim(),
+    segs: document.getElementById('comp-segs').value,
+    nicho: document.getElementById('comp-nicho').value.trim(),
+    oferta: document.getElementById('comp-oferta').value.trim(),
+    fuertes: document.getElementById('comp-fuertes').value.trim(),
+    gaps: document.getElementById('comp-gaps').value.trim(),
+  };
+  if (!item.nombre) return;
+  state.competitors.push(item);
+  save(KEYS.competitors, state.competitors);
+  closeModal('modal-comp');
+  ['comp-nombre','comp-ig','comp-segs','comp-nicho','comp-oferta','comp-fuertes','comp-gaps'].forEach(id => { document.getElementById(id).value = ''; });
+  renderCompetitors();
+  toast('Competidor agregado');
+}
+
+function renderCompetitors() {
+  const list = document.getElementById('comp-list');
+  if (state.competitors.length === 0) {
+    list.innerHTML = '<div style="color:var(--text3);text-align:center;padding:30px 0;font-size:13px">Sin competidores. Agregá uno con el botón.</div>';
+    return;
+  }
+  const colors = ['background:var(--blue-bg);color:var(--blue-text)','background:var(--accent-bg);color:var(--accent-text)','background:var(--amber-bg);color:var(--amber-text)','background:var(--purple-bg);color:var(--purple-text)'];
+  list.innerHTML = state.competitors.map((c,i) => `
+    <div class="comp-item">
+      <div class="comp-avatar" style="${colors[i%colors.length]}">${c.nombre.slice(0,2).toUpperCase()}</div>
+      <div style="flex:1">
+        <div style="font-weight:500;font-size:13px">${c.nombre}</div>
+        <div style="font-size:11px;color:var(--text3)">${c.nicho} · ${c.segs ? Number(c.segs).toLocaleString() + ' seguidores' : ''}</div>
+        ${c.oferta ? `<div style="font-size:11px;color:var(--text2);margin-top:3px">${c.oferta}</div>` : ''}
+      </div>
+      ${c.ig ? `<a href="https://${c.ig}" target="_blank" class="btn" style="font-size:11px">Ver perfil</a>` : ''}
+      <button class="btn" onclick="deleteItem('competitors',${i})" style="font-size:10px;color:var(--red)">×</button>
+    </div>`).join('');
+}
+
+// ═══════════════ METRICS ═══════════════
+function openMetricModal() { openModal('modal-metric'); }
+
+function saveMetric() {
+  const alcance = Number(document.getElementById('met-alcance').value) || 0;
+  const likes = Number(document.getElementById('met-likes').value) || 0;
+  const comments = Number(document.getElementById('met-comments').value) || 0;
+  const eng = alcance > 0 ? ((likes + comments) / alcance * 100).toFixed(1) : 0;
+  const score = eng >= 5 ? '★★★★★' : eng >= 3.5 ? '★★★★' : eng >= 2 ? '★★★' : '★★';
+  const item = {
+    titulo: document.getElementById('met-titulo').value.trim(),
+    tipo: document.getElementById('met-tipo').value,
+    alcance,
+    likes,
+    comments,
+    leads: Number(document.getElementById('met-leads-inp').value) || 0,
+    eng,
+    score,
+  };
+  if (!item.titulo) return;
+  state.metrics.push(item);
+  save(KEYS.metrics, state.metrics);
+  closeModal('modal-metric');
+  ['met-titulo','met-alcance','met-likes','met-comments','met-leads-inp'].forEach(id => { document.getElementById(id).value = ''; });
+  renderMetrics();
+  toast('Métrica cargada');
+}
+
+function renderMetrics() {
+  if (state.metrics.length === 0) {
+    document.getElementById('met-table').innerHTML = '<tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin métricas cargadas aún</td></tr>';
+    document.getElementById('met-top').textContent = '—';
+    document.getElementById('met-eng').textContent = '0%';
+    document.getElementById('met-leads').textContent = '0';
+    return;
+  }
+  const sorted = [...state.metrics].sort((a,b) => b.alcance - a.alcance);
+  document.getElementById('met-top').textContent = sorted[0].titulo.length > 18 ? sorted[0].titulo.slice(0,18)+'...' : sorted[0].titulo;
+  const avgEng = (state.metrics.reduce((s,m) => s + Number(m.eng), 0) / state.metrics.length).toFixed(1);
+  document.getElementById('met-eng').textContent = avgEng + '%';
+  document.getElementById('met-leads').textContent = state.metrics.reduce((s,m) => s + m.leads, 0);
+  const scoreColor = s => s === '★★★★★' ? 'b-green' : s === '★★★★' ? 'b-blue' : s === '★★★' ? 'b-amber' : 'b-red';
+  document.getElementById('met-table').innerHTML = sorted.map((m,i) => `
+    <tr>
+      <td style="font-weight:500">${m.titulo}</td>
+      <td><span class="badge b-blue">${m.tipo}</span></td>
+      <td style="font-family:'DM Mono',monospace">${m.alcance.toLocaleString()}</td>
+      <td style="font-family:'DM Mono',monospace">${m.likes.toLocaleString()}</td>
+      <td style="font-family:'DM Mono',monospace">${m.leads}</td>
+      <td><span class="badge ${scoreColor(m.score)}">${m.score}</span></td>
+    </tr>`).join('');
+}
+
+// ═══════════════ LEADS ═══════════════
+function openLeadModal() { openModal('modal-lead'); }
+
+function saveLead() {
+  const item = {
+    nombre: document.getElementById('lead-nombre').value.trim(),
+    origen: document.getElementById('lead-origen').value,
+    estado: document.getElementById('lead-estado').value,
+    accion: document.getElementById('lead-accion').value.trim(),
+    notas: document.getElementById('lead-notas').value.trim(),
+    fecha: new Date().toLocaleDateString('es-AR'),
+  };
+  if (!item.nombre) return;
+  state.leads.push(item);
+  save(KEYS.leads, state.leads);
+  closeModal('modal-lead');
+  ['lead-nombre','lead-accion','lead-notas'].forEach(id => { document.getElementById(id).value = ''; });
+  renderLeads();
+  toast('Lead agregado');
+}
+
+function renderLeads() {
+  const stateColor = { 'Nuevo':'b-gray','Contactado':'b-blue','Llamada agendada':'b-amber','Propuesta enviada':'b-blue','Cerrado':'b-green','Perdido':'b-red' };
+  const body = document.getElementById('leads-table');
+  if (state.leads.length === 0) {
+    body.innerHTML = '<tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin leads. Agregá uno con el botón.</td></tr>';
+    return;
+  }
+  body.innerHTML = state.leads.map((l,i) => `
+    <tr>
+      <td style="font-weight:500">${l.nombre}</td>
+      <td style="color:var(--text2)">${l.origen}</td>
+      <td><span class="badge ${stateColor[l.estado]||'b-gray'}">${l.estado}</span></td>
+      <td style="color:var(--text2);font-size:12px">${l.accion || '—'}</td>
+      <td><button class="btn" onclick="deleteItem('leads',${i})" style="font-size:10px;color:var(--red)">×</button></td>
+    </tr>`).join('');
+}
+
+// ═══════════════ CLIENTS ═══════════════
+function openClientModal() {
+  document.getElementById('cli-inicio').value = new Date().toISOString().split('T')[0];
+  openModal('modal-client');
+}
+
+function saveClient() {
+  const item = {
+    nombre: document.getElementById('cli-nombre').value.trim(),
+    inicio: document.getElementById('cli-inicio').value,
+    cuota: document.getElementById('cli-cuota').value,
+    proxpago: document.getElementById('cli-proxpago').value,
+    estado: document.getElementById('cli-estado').value,
+  };
+  if (!item.nombre) return;
+  state.clients.push(item);
+  save(KEYS.clients, state.clients);
+  closeModal('modal-client');
+  ['cli-nombre','cli-cuota'].forEach(id => { document.getElementById(id).value = ''; });
+  renderClients();
+  toast('Cliente agregado');
+}
+
+function renderClients() {
+  const stateColor = { 'Al día':'b-green','Pendiente':'b-amber','Vencido':'b-red','Inactivo':'b-gray' };
+  document.getElementById('cli-count-label').textContent = state.clients.length + ' clientes en programa';
+  const body = document.getElementById('clients-table');
+  if (state.clients.length === 0) {
+    body.innerHTML = '<tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin clientes aún</td></tr>';
+    return;
+  }
+  body.innerHTML = state.clients.map((c,i) => `
+    <tr>
+      <td style="font-weight:500">${c.nombre}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text2)">${c.inicio || '—'}</td>
+      <td style="font-family:'DM Mono',monospace">$${Number(c.cuota||0).toLocaleString()} USD</td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text2)">${c.proxpago || '—'}</td>
+      <td><span class="badge ${stateColor[c.estado]||'b-gray'}">${c.estado}</span></td>
+      <td><button class="btn" onclick="deleteItem('clients',${i})" style="font-size:10px;color:var(--red)">×</button></td>
+    </tr>`).join('');
+}
+
+// ═══════════════ FINANZAS ═══════════════
+function openIngModal() {
+  document.getElementById('ing-fecha').value = new Date().toISOString().split('T')[0];
+  openModal('modal-ing');
+}
+function openGasModal() {
+  document.getElementById('gas-fecha').value = new Date().toISOString().split('T')[0];
+  openModal('modal-gas');
+}
+
+function saveIngreso() {
+  const item = {
+    concepto: document.getElementById('ing-concepto').value.trim(),
+    monto: document.getElementById('ing-monto').value,
+    fecha: document.getElementById('ing-fecha').value,
+    cliente: document.getElementById('ing-cliente').value.trim(),
+  };
+  if (!item.concepto || !item.monto) return;
+  state.ingresos.push(item);
+  save(KEYS.ingresos, state.ingresos);
+  closeModal('modal-ing');
+  ['ing-concepto','ing-monto','ing-cliente'].forEach(id => { document.getElementById(id).value = ''; });
+  renderFinanzas();
+  toast('Ingreso registrado');
+}
+
+function saveGasto() {
+  const item = {
+    concepto: document.getElementById('gas-concepto').value.trim(),
+    monto: document.getElementById('gas-monto').value,
+    fecha: document.getElementById('gas-fecha').value,
+    cat: document.getElementById('gas-cat').value,
+  };
+  if (!item.concepto || !item.monto) return;
+  state.gastos.push(item);
+  save(KEYS.gastos, state.gastos);
+  closeModal('modal-gas');
+  ['gas-concepto','gas-monto'].forEach(id => { document.getElementById(id).value = ''; });
+  renderFinanzas();
+  toast('Gasto registrado');
+}
+
+function renderFinanzas() {
+  const ib = document.getElementById('ing-table');
+  ib.innerHTML = state.ingresos.length === 0
+    ? '<tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin ingresos</td></tr>'
+    : state.ingresos.map((i,idx) => `<tr><td>${i.concepto}</td><td style="color:var(--text2)">${i.cliente||'—'}</td><td style="font-family:'DM Mono',monospace;color:var(--accent)">+$${Number(i.monto).toLocaleString()}</td><td style="font-size:11px;color:var(--text3)">${i.fecha}</td><td><button class="btn" onclick="deleteItem('ingresos',${idx})" style="font-size:10px;color:var(--red)">×</button></td></tr>`).join('');
+
+  const gb = document.getElementById('gas-table');
+  gb.innerHTML = state.gastos.length === 0
+    ? '<tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin gastos</td></tr>'
+    : state.gastos.map((g,idx) => `<tr><td>${g.concepto}</td><td><span class="badge b-gray">${g.cat}</span></td><td style="font-family:'DM Mono',monospace;color:var(--red)">-$${Number(g.monto).toLocaleString()}</td><td style="font-size:11px;color:var(--text3)">${g.fecha}</td><td><button class="btn" onclick="deleteItem('gastos',${idx})" style="font-size:10px;color:var(--red)">×</button></td></tr>`).join('');
+}
+
+// ═══════════════ DELETE ═══════════════
+function deleteItem(key, idx) {
+  if (!confirm('¿Eliminar este elemento?')) return;
+  state[key].splice(idx, 1);
+  save(KEYS[key], state[key]);
+  if (key === 'content') renderContent();
+  if (key === 'competitors') renderCompetitors();
+  if (key === 'metrics') renderMetrics();
+  if (key === 'leads') renderLeads();
+  if (key === 'clients') renderClients();
+  if (key === 'ingresos' || key === 'gastos') renderFinanzas();
+  toast('Eliminado');
+}
+
+// ═══════════════ INIT ═══════════════
+renderDashboard();
+</script>
+</body>
+</html>
