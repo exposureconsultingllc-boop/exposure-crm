@@ -3,1511 +3,1037 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Exposure CRM — Agencia de Contenido</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>CRM Exposure</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root {
-  --bg: #f7f6f3;
-  --surface: #ffffff;
-  --surface2: #f0efe9;
-  --border: rgba(0,0,0,0.08);
-  --border2: rgba(0,0,0,0.14);
-  --text: #1a1916;
-  --text2: #6b6a65;
-  --text3: #9e9d97;
-  --accent: #2d6a4f;
-  --accent-bg: #d8f3dc;
-  --accent-text: #1b4332;
-  --amber: #e07b00;
-  --amber-bg: #fff3cd;
-  --amber-text: #7d4e00;
-  --blue: #1a56a0;
-  --blue-bg: #dbeafe;
-  --blue-text: #1e3a5f;
-  --red: #b91c1c;
-  --red-bg: #fee2e2;
-  --red-text: #7f1d1d;
-  --purple: #6d28d9;
-  --purple-bg: #ede9fe;
-  --purple-text: #4c1d95;
-  --radius: 10px;
-  --radius-sm: 6px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+:root{
+  --bg:#090908;--surface:#101010;--s2:#171714;--s3:#1f1f1c;
+  --border:rgba(255,255,255,0.045);--border2:rgba(255,255,255,0.09);--borderg:rgba(212,168,50,0.18);
+  --gold:#d4a832;--goldl:#f0c84a;--goldd:#a07818;--goldbg:rgba(212,168,50,0.09);
+  --text:#e8e6de;--t2:#7a7870;--t3:#424038;
+  --green:#3d8a5a;--greenbg:rgba(61,138,90,0.1);
+  --red:#b84848;--redbg:rgba(184,72,72,0.1);
+  --blue:#3d6aaa;--bluebg:rgba(61,106,170,0.1);
+  --purple:#7a4ab8;--purplebg:rgba(122,74,184,0.1);
+  --r:14px;--rs:9px;
+  --glow:0 0 0 1px rgba(0,0,0,0.3),0 2px 8px rgba(0,0,0,0.45),0 1px 2px rgba(0,0,0,0.6);
+  --glow-g:0 0 0 1px rgba(212,168,50,0.1),0 4px 16px rgba(0,0,0,0.5),0 1px 3px rgba(0,0,0,0.65);
+  --inner:inset 0 1px 0 rgba(255,255,255,0.03),inset 0 -1px 0 rgba(0,0,0,0.25);
 }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh;display:flex;background-image:radial-gradient(ellipse at 10% 35%,rgba(212,168,50,0.04) 0%,transparent 50%),radial-gradient(ellipse at 90% 70%,rgba(180,140,40,0.03) 0%,transparent 45%),radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 0%,rgba(0,0,0,0.4) 100%)}
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 14px;
-  line-height: 1.5;
-  min-height: 100vh;
-  display: flex;
+/* SIDEBAR */
+.sidebar{
+  width:48px;min-width:48px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),
+    linear-gradient(160deg,rgba(16,15,14,1) 0%,rgba(10,9,9,1) 60%,rgba(13,12,11,1) 100%);
+  border-right:1px solid rgba(212,168,50,0.1);
+  display:flex;flex-direction:column;
+  height:100vh;position:sticky;top:0;
+  overflow:hidden;z-index:50;
+  box-shadow:2px 0 20px rgba(0,0,0,0.5),inset -1px 0 0 rgba(212,168,50,0.05);
+  transition:width 0.3s cubic-bezier(0.4,0,0.2,1),min-width 0.3s cubic-bezier(0.4,0,0.2,1)
 }
-
-/* ── SIDEBAR ── */
-.sidebar {
-  width: 240px;
-  min-width: 240px;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  overflow-y: auto;
+.sidebar:hover{
+  width:216px;min-width:216px;
+  box-shadow:4px 0 28px rgba(0,0,0,0.55),inset -1px 0 0 rgba(212,168,50,0.09)
 }
+.logo-wrap{padding:12px 0 10px;border-bottom:1px solid rgba(212,168,50,0.08);display:flex;flex-direction:column;align-items:center;gap:4px;overflow:hidden}
+.logo-circle{width:32px;height:32px;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 30% 30%,rgba(20,18,12,1),rgba(6,6,8,1));box-shadow:0 0 0 1px rgba(212,175,55,0.1),0 2px 8px rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;transition:width 0.28s,height 0.28s;flex-shrink:0}.sidebar:hover .logo-circle{width:52px;height:52px}
+.logo-circle img{width:110%;height:110%;object-fit:cover;filter:brightness(1.05)}
+.logo-name{font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);opacity:0;max-height:0;overflow:hidden;white-space:nowrap;transition:opacity 0.2s,max-height 0.3s}.sidebar:hover .logo-name{opacity:0.85;max-height:20px;transition:opacity 0.25s 0.1s,max-height 0.3s}
+.nav-section{padding:8px 4px 2px}
+.nav-lbl{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);padding:0 8px;margin-bottom:3px;opacity:0;max-height:0;overflow:hidden;white-space:nowrap;transition:opacity 0.2s,max-height 0.3s}.sidebar:hover .nav-lbl{opacity:1;max-height:20px;transition:opacity 0.25s 0.1s,max-height 0.3s}
+.nav-item{display:flex;align-items:center;gap:0;padding:8px 0;border-radius:var(--rs);cursor:pointer;font-size:13px;font-weight:600;color:var(--t2);transition:all 0.25s;user-select:none;white-space:nowrap;overflow:hidden;justify-content:center;width:100%}.sidebar:hover .nav-item{justify-content:flex-start;gap:10px;padding:8px 10px}
+.nav-item:hover{background:var(--s2);color:var(--text)}
+.nav-item.active{background:linear-gradient(135deg,rgba(212,168,50,0.1),rgba(180,140,40,0.05));color:var(--gold);border:1px solid rgba(212,168,50,0.18);box-shadow:inset 0 1px 0 rgba(212,168,50,0.08),0 1px 4px rgba(0,0,0,0.3)}
+.nav-item span.nav-text{max-width:0;opacity:0;overflow:hidden;transition:max-width 0.3s,opacity 0.2s;display:inline-block;vertical-align:middle}
+.sidebar:hover .nav-item span.nav-text{max-width:180px;opacity:1;transition:max-width 0.3s,opacity 0.25s 0.08s}
+.ndot{width:5px;height:5px;border-radius:50%;background:var(--t3);flex-shrink:0;transition:all 0.1s}
+.nav-item.active .ndot{background:var(--gold)}
+.sfooter{margin-top:auto;padding:10px 14px;border-top:1px solid rgba(212,168,50,0.07);font-size:9px;color:var(--t3);letter-spacing:0.08em;text-transform:uppercase;opacity:0;transition:opacity 0.15s;white-space:nowrap}.sidebar:hover .sfooter{opacity:1;transition:opacity 0.2s 0.15s}
 
-.logo-wrap {
-  padding: 24px 20px 20px;
-  border-bottom: 1px solid var(--border);
-}
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:28px 32px;background:transparent;position:relative;transition:all 0.25s}
+.main::after{content:'';position:fixed;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");opacity:0.018;z-index:0}
+.page{display:none}.page.active{display:block}
+.ph{margin-bottom:24px}
+.ptitle{font-size:26px;font-weight:900;letter-spacing:-0.01em;color:var(--text);text-transform:uppercase;font-family:'Barlow Condensed',sans-serif}
+.psub{font-size:10px;font-weight:700;color:var(--t3);margin-top:3px;letter-spacing:0.08em;text-transform:uppercase}
 
-.logo-name {
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: var(--text);
-}
+/* CARDS */
+.card{background:linear-gradient(145deg,rgba(20,19,18,0.96) 0%,rgba(13,12,12,0.98) 100%);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:var(--glow);backdrop-filter:blur(2px)}
+.cardg{border-color:rgba(212,175,55,0.14);box-shadow:0 0 0 1px rgba(212,175,55,0.05),0 2px 8px rgba(0,0,0,0.4),0 1px 2px rgba(0,0,0,0.6)}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ct{font-size:10px;font-weight:700;color:var(--t2);letter-spacing:0.08em;text-transform:uppercase}
 
-.logo-tag {
-  font-size: 11px;
-  color: var(--text3);
-  margin-top: 2px;
-  font-family: 'DM Mono', monospace;
-}
+/* METRICS */
+.mgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.mgrid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.mgrid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.met{background:linear-gradient(145deg,rgba(22,20,18,0.97) 0%,rgba(12,11,11,0.99) 100%);border:1px solid rgba(255,255,255,0.04);border-radius:var(--r);padding:16px;position:relative;overflow:hidden;box-shadow:0 0 0 1px rgba(212,175,55,0.04),0 2px 8px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.025),inset 0 -1px 0 rgba(0,0,0,0.25)}
+.met::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0.3}
+.met::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent)}
+.mlbl{font-size:9px;font-weight:700;color:var(--t3);margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase}
+.mval{font-size:26px;font-weight:900;letter-spacing:-0.02em;color:var(--text);font-family:'Barlow Condensed',sans-serif}
+.mdelta{font-size:11px;margin-top:5px;font-weight:600}
+.up{color:var(--green)}.dn{color:var(--red)}
 
-.nav-group {
-  padding: 16px 12px 4px;
-}
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 
-.nav-group-label {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text3);
-  padding: 0 8px;
-  margin-bottom: 4px;
-}
+/* BADGES */
+.badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:0.05em;text-transform:uppercase}
+.bg{background:var(--goldbg);color:var(--gold);border:1px solid var(--borderg)}
+.bgr{background:var(--greenbg);color:var(--green)}
+.ba{background:rgba(212,175,55,0.1);color:#c9a227}
+.bb{background:var(--bluebg);color:var(--blue)}
+.br{background:var(--redbg);color:var(--red)}
+.bgy{background:var(--s2);color:var(--t2)}
+.bp{background:var(--purplebg);color:var(--purple)}
 
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 8px 10px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 13.5px;
-  color: var(--text2);
-  transition: all 0.12s;
-  user-select: none;
-}
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{font-size:9px;font-weight:700;color:var(--t3);text-align:left;padding:0 8px 10px 0;border-bottom:1px solid rgba(212,175,55,0.15);letter-spacing:0.08em;text-transform:uppercase}
+.tbl td{padding:9px 8px 9px 0;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--s2)}
 
-.nav-item:hover { background: var(--surface2); color: var(--text); }
-.nav-item.active { background: var(--surface2); color: var(--text); font-weight: 500; }
+/* FILTER TABS */
+.ftabs{display:flex;gap:4px}
+.ftab{font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--t2);cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;transition:all 0.12s;font-family:'Barlow',sans-serif}
+.ftab:hover{background:linear-gradient(145deg,rgba(30,28,40,0.8),rgba(20,19,28,0.6));color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.3)}
+.ftab.active{background:linear-gradient(145deg,rgba(200,168,75,0.12),rgba(180,148,55,0.06));color:var(--gold);border-color:var(--borderg);box-shadow:0 1px 6px rgba(0,0,0,0.3),inset 0 1px 0 rgba(212,175,55,0.08)}
 
-.nav-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--border2);
-  flex-shrink: 0;
-}
-.nav-item.active .nav-dot { background: var(--accent); }
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:6px 13px;border-radius:var(--rs);border:1px solid var(--border2);background:transparent;color:var(--t2);cursor:pointer;letter-spacing:0.04em;text-transform:uppercase;transition:all 0.1s;font-family:'Barlow',sans-serif}
+.btn:hover{background:var(--s2);color:var(--text)}
+.btnp{background:linear-gradient(145deg,rgba(200,168,75,0.12),rgba(180,148,55,0.06));color:var(--gold);border-color:var(--borderg);box-shadow:0 1px 4px rgba(0,0,0,0.3),inset 0 1px 0 rgba(212,175,55,0.1)}
+.btnp:hover{background:linear-gradient(145deg,rgba(200,168,75,0.2),rgba(180,148,55,0.1));box-shadow:0 2px 8px rgba(0,0,0,0.4),inset 0 1px 0 rgba(212,175,55,0.15)}
+.btnd{background:var(--redbg);color:var(--red);border-color:rgba(204,85,85,0.2)}
 
-.sidebar-footer {
-  margin-top: auto;
-  padding: 16px 20px;
-  border-top: 1px solid var(--border);
-  font-size: 11px;
-  color: var(--text3);
-  font-family: 'DM Mono', monospace;
-}
+/* INPUTS */
+.addrow{display:flex;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.inp{flex:1;font-size:13px;padding:8px 11px;border:1px solid var(--border2);border-radius:var(--rs);background:linear-gradient(145deg,rgba(10,10,9,0.9),rgba(18,18,16,0.7));color:var(--text);outline:none;font-family:'Barlow',sans-serif;box-shadow:inset 0 2px 4px rgba(0,0,0,0.3),inset 0 1px 0 rgba(0,0,0,0.2)}
+.inp:focus{border-color:rgba(212,168,50,0.35);background:linear-gradient(145deg,rgba(14,13,12,0.95),rgba(20,20,18,0.8));box-shadow:inset 0 2px 4px rgba(0,0,0,0.3),0 0 0 2px rgba(212,168,50,0.05)}
+.inpf{width:100%;font-size:13px;padding:8px 11px;border:1px solid var(--border2);border-radius:var(--rs);background:linear-gradient(145deg,rgba(10,10,9,0.9),rgba(18,18,16,0.7));color:var(--text);outline:none;font-family:'Barlow',sans-serif;box-shadow:inset 0 2px 4px rgba(0,0,0,0.3),inset 0 1px 0 rgba(0,0,0,0.2)}
+.inpf:focus{border-color:rgba(212,168,50,0.35);background:linear-gradient(145deg,rgba(14,13,12,0.95),rgba(20,20,18,0.8));box-shadow:inset 0 2px 4px rgba(0,0,0,0.3),0 0 0 2px rgba(212,168,50,0.05)}
+.sel{font-size:12px;padding:8px 9px;border:1px solid var(--border2);border-radius:var(--rs);background:linear-gradient(145deg,rgba(10,10,9,0.9),rgba(18,18,16,0.7));color:var(--text);outline:none;font-family:'Barlow',sans-serif;cursor:pointer;box-shadow:inset 0 2px 3px rgba(0,0,0,0.25)}
+.sel:focus{border-color:var(--gold)}
+.selvf{width:100%;font-size:12px;padding:8px 9px;border:1px solid var(--border2);border-radius:var(--rs);background:linear-gradient(145deg,rgba(10,10,9,0.9),rgba(18,18,16,0.7));color:var(--text);outline:none;font-family:'Barlow',sans-serif;cursor:pointer;box-shadow:inset 0 2px 3px rgba(0,0,0,0.25)}
 
-/* ── MAIN ── */
-.main {
-  flex: 1;
-  overflow-y: auto;
-  padding: 32px 36px;
-  max-width: 1100px;
-}
+/* TASK */
+.ti{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s;border-radius:var(--rs)}
+.ti:last-of-type{border-bottom:none}
+.ti:hover{background:var(--s2);margin:0 -8px;padding:9px 8px}
+.chk{width:17px;height:17px;min-width:17px;border-radius:5px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all 0.15s;margin-top:1px;flex-shrink:0;background:linear-gradient(145deg,rgba(10,9,16,0.8),rgba(20,19,28,0.6));box-shadow:inset 0 2px 3px rgba(0,0,0,0.3),inset 0 1px 0 rgba(0,0,0,0.2)}
+.chk.done{background:linear-gradient(145deg,#f0c84a,#c89828);border-color:#c89828;box-shadow:0 2px 10px rgba(212,168,50,0.35),inset 0 1px 0 rgba(255,255,255,0.25)}
+.chk.done::after{content:'';display:block;width:4px;height:8px;border:1.5px solid #080808;border-top:none;border-left:none;transform:rotate(45deg) translate(-1px,-1px)}
+.tt{font-size:13px;color:var(--text);line-height:1.4}
+.tt.done{text-decoration:line-through;color:var(--t3)}
 
-.page { display: none; }
-.page.active { display: block; }
+/* PROGRESS */
+.pwrap{margin-bottom:18px}
+.plbls{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-bottom:5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase}
+.pbar{height:4px;background:var(--s2);border-radius:3px;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--goldd),var(--gold),var(--goldl));border-radius:3px;transition:width 0.4s;box-shadow:0 0 6px rgba(200,168,75,0.3)}
 
-.page-header { margin-bottom: 28px; }
-.page-title { font-size: 22px; font-weight: 500; letter-spacing: -0.03em; color: var(--text); }
-.page-sub { font-size: 13px; color: var(--text3); margin-top: 4px; }
+/* PHASE */
+.ptag{display:inline-block;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:5px;letter-spacing:0.06em;text-transform:uppercase}
 
-/* ── CARDS ── */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow);
-}
+/* AVATAR FIELDS */
+.afield{margin-bottom:11px}
+.albl{font-size:9px;color:var(--gold);margin-bottom:4px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;opacity:0.8;display:block}
+.ainp{width:100%;font-size:13px;color:var(--text);background:var(--s2);padding:9px 11px;border-radius:var(--rs);border:1px solid var(--border2);font-family:'Barlow',sans-serif;outline:none;resize:vertical;min-height:56px}
+.ainp:focus{border-color:var(--gold);background:var(--s3)}
 
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
+/* COMP */
+.ci{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)}
+.ci:last-child{border-bottom:none}
+.cav{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
 
-.card-title {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
-}
+/* STAT */
+.srow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.srow:last-child{border-bottom:none}
+.sn{color:var(--t2);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:0.04em}
+.sv{font-weight:700;color:var(--text);text-align:right}
 
-/* ── METRICS ── */
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0,1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
+/* CHART */
+.chwrap{position:relative;height:190px}
 
-.metric {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-}
+/* MODAL */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;align-items:center;justify-content:center}
+.mbg.open{display:flex}
+.modal{background:linear-gradient(160deg,rgba(22,20,18,0.99) 0%,rgba(12,11,10,1) 100%);border:1px solid var(--borderg);border-radius:calc(var(--r) + 4px);padding:26px;width:520px;max-width:96vw;max-height:90vh;overflow-y:auto;box-shadow:0 0 0 1px rgba(212,175,55,0.08),0 20px 60px rgba(0,0,0,0.7),0 8px 24px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.04)}
+.mtitle{font-size:20px;font-weight:900;margin-bottom:18px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:0.02em;color:var(--gold)}
+.mact{display:flex;gap:7px;justify-content:flex-end;margin-top:18px}
+.mfield{margin-bottom:11px}
+.mlbl{font-size:9px;color:var(--gold);margin-bottom:4px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;opacity:0.8;display:block}
+.mg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 
-.metric-label { font-size: 11px; color: var(--text3); margin-bottom: 8px; font-family: 'DM Mono', monospace; }
-.metric-value { font-size: 26px; font-weight: 300; letter-spacing: -0.03em; color: var(--text); }
-.metric-delta { font-size: 11px; margin-top: 6px; }
-.up { color: var(--accent); }
-.dn { color: var(--red); }
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--goldbg);color:var(--gold);border:1px solid var(--borderg);padding:9px 16px;border-radius:var(--rs);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;opacity:0;transform:translateY(8px);transition:all 0.2s;z-index:200;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
 
-/* ── GRID ── */
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-.three-col { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-bottom: 16px; }
+/* API BADGE */
+.api-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(68,119,187,0.1);color:var(--blue);border:1px solid rgba(68,119,187,0.2);letter-spacing:0.05em;text-transform:uppercase;cursor:default}
+.api-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--blue);display:block}
+.scraped-badge{background:rgba(136,85,204,0.1);color:var(--purple);border-color:rgba(136,85,204,0.2)}
+.scraped-badge::before{background:var(--purple)}
 
-/* ── BADGES ── */
-.badge {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 20px;
-  font-family: 'DM Mono', monospace;
-  white-space: nowrap;
-}
-.b-green { background: var(--accent-bg); color: var(--accent-text); }
-.b-amber { background: var(--amber-bg); color: var(--amber-text); }
-.b-blue { background: var(--blue-bg); color: var(--blue-text); }
-.b-red { background: var(--red-bg); color: var(--red-text); }
-.b-gray { background: var(--surface2); color: var(--text2); }
-.b-purple { background: var(--purple-bg); color: var(--purple-text); }
+/* EXPORT */
+.export-bar{background:var(--s2);border:1px solid var(--borderg);border-radius:var(--r);padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.export-info{font-size:11px;color:var(--t2)}
+.export-info strong{color:var(--gold);font-weight:700}
 
-/* ── TABLES ── */
-.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
-.tbl th { font-size: 10px; font-weight: 500; color: var(--text3); text-align: left; padding: 0 0 10px; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase; }
-.tbl td { padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
-.tbl tr:last-child td { border-bottom: none; }
-.tbl tr:hover td { background: var(--surface2); }
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 
-/* ── FILTER TABS ── */
-.ftabs { display: flex; gap: 4px; }
-.ftab {
-  font-size: 11px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--text2);
-  cursor: pointer;
-  font-family: 'DM Mono', monospace;
-  transition: all 0.1s;
-}
-.ftab:hover { background: var(--surface2); }
-.ftab.active { background: var(--text); color: var(--surface); border-color: var(--text); }
+/* BLUR DIVISIONS */
+.card::before{content:'';position:absolute;inset:-1px;border-radius:calc(var(--r) + 1px);background:transparent;pointer-events:none;z-index:-1;filter:blur(8px);opacity:0}
+.page-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.08) 30%,rgba(212,175,55,0.08) 70%,transparent);margin:20px 0;position:relative}
+.page-divider::before{content:'';position:absolute;inset:-4px 20%;background:radial-gradient(ellipse,rgba(212,175,55,0.06),transparent 70%);filter:blur(4px)}
 
-/* ── BUTTONS ── */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  padding: 7px 14px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.1s;
-}
-.btn:hover { background: var(--surface2); }
-.btn-primary { background: var(--text); color: var(--surface); border-color: var(--text); }
-.btn-primary:hover { background: #333; }
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--t3);flex-shrink:0;transition:all 0.2s}
+.nav-item.active .ndot{background:#d4a832;box-shadow:0 0 8px rgba(212,168,50,0.5),0 0 16px rgba(212,168,50,0.2)}
 
-.add-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
-}
+/* AMBIENT GLOW behind cards */
+.card{position:relative}
 
-.inp {
-  flex: 1;
-  font-size: 13px;
-  padding: 8px 12px;
-  border: 1px solid var(--border2);
-  border-radius: var(--radius-sm);
-  background: var(--surface2);
-  color: var(--text);
-  outline: none;
-  font-family: 'DM Sans', sans-serif;
-}
-.inp:focus { border-color: var(--accent); background: var(--surface); }
+/* Suavizar bordes tabla */
+.tbl td{border-bottom:1px solid rgba(255,255,255,0.03)}
+.tbl th{border-bottom:1px solid rgba(212,175,55,0.12)}
 
-.sel {
-  font-size: 12px;
-  padding: 8px 10px;
-  border: 1px solid var(--border2);
-  border-radius: var(--radius-sm);
-  background: var(--surface2);
-  color: var(--text);
-  outline: none;
-  font-family: 'DM Mono', monospace;
-  cursor: pointer;
-}
+/* Badge más suave */
+.badge{box-shadow:0 1px 3px rgba(0,0,0,0.3)}
+.bg{background:rgba(200,168,75,0.07);color:rgba(200,168,75,0.85);border:1px solid rgba(200,168,75,0.15)}
+.bgr{background:rgba(61,138,90,0.08);color:rgba(61,138,90,0.85);border:1px solid rgba(61,138,90,0.15)}
+.br{background:rgba(184,72,72,0.08);color:rgba(184,72,72,0.8);border:1px solid rgba(184,72,72,0.15)}
+.bb{background:rgba(61,106,170,0.08);color:rgba(61,106,170,0.85);border:1px solid rgba(61,106,170,0.15)}
+.ba{background:rgba(180,140,50,0.08);color:rgba(180,140,50,0.8);border:1px solid rgba(180,140,50,0.15)}
+.bp{background:rgba(122,74,184,0.08);color:rgba(122,74,184,0.8);border:1px solid rgba(122,74,184,0.15)}
+.bgy{background:rgba(255,255,255,0.04);color:var(--t2);border:1px solid rgba(255,255,255,0.07)}
 
-/* ── TASKS ── */
-.task-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: background 0.1s;
-  border-radius: var(--radius-sm);
-}
-.task-item:last-of-type { border-bottom: none; }
-.task-item:hover { background: var(--surface2); margin: 0 -8px; padding: 10px 8px; }
+/* Metric value más pesado */
+.mval{font-size:26px;font-weight:900;letter-spacing:-0.02em;color:var(--text);font-family:'Barlow Condensed',sans-serif;text-shadow:0 1px 4px rgba(0,0,0,0.5)}
 
-.chk {
-  width: 18px; height: 18px;
-  min-width: 18px;
-  border-radius: 5px;
-  border: 1.5px solid var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
-  margin-top: 1px;
-  flex-shrink: 0;
-}
-.chk.done { background: var(--accent); border-color: var(--accent); }
-.chk.done::after {
-  content: '';
-  display: block;
-  width: 4px; height: 8px;
-  border: 1.5px solid white;
-  border-top: none; border-left: none;
-  transform: rotate(45deg) translate(-1px, -1px);
-}
+/* Smooth hover en rows */
+.tbl tr:hover td{background:rgba(255,255,255,0.015);transition:background 0.15s}
 
-.task-text { font-size: 13px; color: var(--text); line-height: 1.4; }
-.task-text.done { text-decoration: line-through; color: var(--text3); }
-
-/* ── PROGRESS ── */
-.prog-wrap { margin-bottom: 20px; }
-.prog-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-bottom: 6px; font-family: 'DM Mono', monospace; }
-.prog-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
-.prog-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.4s; }
-
-/* ── PHASE TAGS ── */
-.phase-tag {
-  display: inline-block;
-  font-size: 9px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 20px;
-  margin-bottom: 6px;
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-/* ── CALENDAR ── */
-.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; }
-.cal-header { font-size: 10px; color: var(--text3); text-align: center; padding: 4px 0; font-family: 'DM Mono', monospace; }
-.cal-day {
-  min-height: 64px;
-  background: var(--surface2);
-  border-radius: var(--radius-sm);
-  padding: 6px;
-  font-size: 10px;
-}
-.cal-day-num { color: var(--text3); margin-bottom: 4px; font-family: 'DM Mono', monospace; }
-.cal-event {
-  font-size: 9px;
-  padding: 2px 5px;
-  border-radius: 3px;
-  margin-bottom: 2px;
-  color: var(--text);
-  line-height: 1.3;
-  cursor: pointer;
-}
-.ev-reel { background: var(--blue-bg); }
-.ev-car { background: var(--accent-bg); }
-.ev-hist { background: var(--amber-bg); }
-
-/* ── AVATAR FIELDS ── */
-.av-field { margin-bottom: 12px; }
-.av-label { font-size: 10px; color: var(--text3); margin-bottom: 5px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.04em; }
-.av-val {
-  font-size: 13px;
-  color: var(--text);
-  background: var(--surface2);
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  line-height: 1.5;
-}
-.av-inp {
-  width: 100%;
-  font-size: 13px;
-  color: var(--text);
-  background: var(--surface2);
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border2);
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-  resize: vertical;
-  min-height: 60px;
-}
-.av-inp:focus { border-color: var(--accent); background: var(--surface); }
-
-/* ── COMP ITEMS ── */
-.comp-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-.comp-item:last-child { border-bottom: none; }
-.comp-avatar {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 500;
-  flex-shrink: 0;
-}
-
-/* ── STAT ROWS ── */
-.stat-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 9px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
-.stat-row:last-child { border-bottom: none; }
-.stat-name { color: var(--text2); }
-.stat-val { font-weight: 500; color: var(--text); text-align: right; max-width: 55%; }
-
-/* ── CHART WRAP ── */
-.chart-wrap { position: relative; height: 200px; }
-
-/* ── MODAL ── */
-.modal-bg {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.3);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
-}
-.modal-bg.open { display: flex; }
-.modal {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 24px;
-  width: 480px;
-  max-width: 95vw;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-}
-.modal-title { font-size: 16px; font-weight: 500; margin-bottom: 16px; }
-.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
-.modal-field { margin-bottom: 12px; }
-.modal-label { font-size: 11px; color: var(--text3); margin-bottom: 5px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.04em; }
-
-/* ── TOAST ── */
-.toast {
-  position: fixed;
-  bottom: 24px; right: 24px;
-  background: var(--text);
-  color: var(--surface);
-  padding: 10px 18px;
-  border-radius: var(--radius-sm);
-  font-size: 12px;
-  font-family: 'DM Mono', monospace;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.2s;
-  z-index: 200;
-  pointer-events: none;
-}
-.toast.show { opacity: 1; transform: translateY(0); }
+/* Btn normal más oscuro */
+.btn{background:rgba(255,255,255,0.02);box-shadow:0 1px 3px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.03)}
+.btn:hover{background:rgba(255,255,255,0.04);box-shadow:0 2px 6px rgba(0,0,0,0.4)}
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="logo-wrap">
-    <div class="logo-name">Exposure CRM</div>
-    <div class="logo-tag">agencia de contenido</div>
+    <div class="logo-circle">
+      <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAQ4BDgDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAcIBQYDBAkCAf/EAFkQAQABAwMBAwUKBwsICQMFAAABAgMEBQYRBxIhMQgTQVFhFBUYIjJWcYGR0xdCUlWSldEWIzdicnSTlKGz0gkkRoKEsbLEJTM0NUNUdcHwRWNzJ0SltMP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8Aq0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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IyZjTddvYW1tX0GizFVvU7uPcuXJq76fMzXMRxx38zX4+z2gw4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/9k=" alt="Exposure">
+    </div>
+    <div class="logo-name">CRM Exposure</div>
   </div>
-
-  <div class="nav-group">
-    <div class="nav-group-label">Principal</div>
-    <div class="nav-item active" onclick="nav('dashboard',this)"><div class="nav-dot"></div> Dashboard</div>
-    <div class="nav-item" onclick="nav('accionables',this)"><div class="nav-dot"></div> Accionables</div>
+  <div class="nav-section">
+    <div class="nav-lbl">Principal</div>
+    <div class="nav-item active" onclick="nav('dashboard',this)"><div class="ndot"></div><span class="nav-text">Dashboard</span></div>
+    <div class="nav-item" onclick="nav('accionables',this)"><div class="ndot"></div><span class="nav-text">Accionables</span></div>
   </div>
-
-  <div class="nav-group">
-    <div class="nav-group-label">Agencia</div>
-    <div class="nav-item" onclick="nav('fundaciones',this)"><div class="nav-dot"></div> Fundaciones</div>
-    <div class="nav-item" onclick="nav('calendario',this)"><div class="nav-dot"></div> Contenido</div>
-    <div class="nav-item" onclick="nav('competencia',this)"><div class="nav-dot"></div> Competencia</div>
-    <div class="nav-item" onclick="nav('metricas',this)"><div class="nav-dot"></div> Métricas</div>
+  <div class="nav-section">
+    <div class="nav-lbl">Agencia</div>
+    <div class="nav-item" onclick="nav('fundaciones',this)"><div class="ndot"></div><span class="nav-text">Fundaciones</span></div>
+    <div class="nav-item" onclick="nav('calendario',this)"><div class="ndot"></div><span class="nav-text">Contenido</span></div>
+    <div class="nav-item" onclick="nav('angulos',this)"><div class="ndot"></div><span class="nav-text">Ángulos</span></div>
+    <div class="nav-item" onclick="nav('competencia',this)"><div class="ndot"></div><span class="nav-text">Referentes</span></div>
+    <div class="nav-item" onclick="nav('metricas',this)"><div class="ndot"></div><span class="nav-text">Métricas</span></div>
   </div>
-
-  <div class="nav-group">
-    <div class="nav-group-label">Ventas</div>
-    <div class="nav-item" onclick="nav('leads',this)"><div class="nav-dot"></div> Leads</div>
-    <div class="nav-item" onclick="nav('clientes',this)"><div class="nav-dot"></div> Clientes</div>
-    <div class="nav-item" onclick="nav('finanzas',this)"><div class="nav-dot"></div> Finanzas</div>
+  <div class="nav-section">
+    <div class="nav-lbl">Ventas</div>
+    <div class="nav-item" onclick="nav('leads',this)"><div class="ndot"></div><span class="nav-text">Leads</span></div>
+    <div class="nav-item" onclick="nav('clientes',this)"><div class="ndot"></div><span class="nav-text">Clientes</span></div>
+    <div class="nav-item" onclick="nav('finanzas',this)"><div class="ndot"></div><span class="nav-text">Finanzas</span></div>
   </div>
+  <div class="nav-section">
+    <div class="nav-lbl">Sistema</div>
+    <div class="nav-item" onclick="nav('exportar',this)"><div class="ndot"></div><span class="nav-text">Exportar / Importar</span></div>
+  </div>
+  <div class="sfooter">datos locales · v2.0 · exposure</div>
+</div>
 
-  <div class="sidebar-footer">
-    datos guardados localmente<br>
-    v1.0 — Exposure Agency
+<div class="main">
+
+<!-- ═══ DASHBOARD ═══ -->
+<div class="page active" id="page-dashboard">
+  <div class="ph" style="display:flex;align-items:center;justify-content:space-between">
+    <div><div class="ptitle">Dashboard</div><div class="psub">Resumen financiero</div></div>
+    <div class="ftabs" id="dash-filter">
+      <button class="ftab" onclick="setDF('dia',this)">Día</button>
+      <button class="ftab" onclick="setDF('semana',this)">Semana</button>
+      <button class="ftab active" onclick="setDF('mes',this)">Mes</button>
+      <button class="ftab" onclick="setDF('año',this)">Año</button>
+    </div>
+  </div>
+  <div class="mgrid">
+    <div class="met"><div class="mlbl">Ingresos</div><div class="mval" id="m-ing">/bin/sh</div></div>
+    <div class="met"><div class="mlbl">Egresos</div><div class="mval" id="m-gas">/bin/sh</div></div>
+    <div class="met"><div class="mlbl">Neto</div><div class="mval" id="m-net">/bin/sh</div></div>
+    <div class="met"><div class="mlbl">Clientes activos</div><div class="mval" id="m-cli">0</div></div>
+  </div>
+  <div class="mgrid2">
+    <div class="met"><div class="mlbl">Personal A</div><div class="mval" id="m-pa">/bin/sh</div></div>
+    <div class="met"><div class="mlbl">Personal B</div><div class="mval" id="m-pb">/bin/sh</div></div>
+  </div>
+  <div class="g2">
+    <div class="card cardg">
+      <div class="ch"><div class="ct">Ingresos vs Egresos</div></div>
+      <div class="chwrap"><canvas id="chart-dash" role="img" aria-label="Ingresos y gastos">Comparativa.</canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">Últimos movimientos</div><button class="btn" onclick="nav('finanzas',document.querySelector('[onclick*=finanzas]'))">Ver todos</button></div>
+      <table class="tbl"><thead><tr><th>Concepto</th><th>Tipo</th><th>Monto</th></tr></thead><tbody id="dash-movs"></tbody></table>
+    </div>
   </div>
 </div>
 
-<!-- MAIN -->
-<div class="main">
+<!-- ═══ ACCIONABLES ═══ -->
+<div class="page" id="page-accionables">
+  <div class="ph"><div class="ptitle">Accionables</div><div class="psub">Roadmap del programa — tachá lo que completaste</div></div>
+  <div class="mgrid3">
+    <div class="met"><div class="mlbl">Completadas</div><div class="mval" id="ac-done">0</div></div>
+    <div class="met"><div class="mlbl">Pendientes</div><div class="mval" id="ac-pend">0</div></div>
+    <div class="met"><div class="mlbl">Progreso</div><div class="mval" id="ac-pct">0%</div></div>
+  </div>
+  <div class="pwrap">
+    <div class="plbls"><span>Progreso general</span><span id="ac-pl">0 / 0</span></div>
+    <div class="pbar"><div class="pfill" id="ac-pb" style="width:0%"></div></div>
+  </div>
+  <div id="phases-cont"></div>
+</div>
 
-  <!-- ═══════════════ DASHBOARD ═══════════════ -->
-  <div class="page active" id="page-dashboard">
-    <div class="page-header">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div class="page-title">Dashboard</div>
-          <div class="page-sub">Resumen financiero de la agencia</div>
-        </div>
-        <div class="ftabs" id="dash-filter">
-          <button class="ftab" onclick="setDashFilter('dia',this)">Día</button>
-          <button class="ftab" onclick="setDashFilter('semana',this)">Semana</button>
-          <button class="ftab active" onclick="setDashFilter('mes',this)">Mes</button>
-          <button class="ftab" onclick="setDashFilter('año',this)">Año</button>
-        </div>
-      </div>
+<!-- ═══ FUNDACIONES ═══ -->
+<div class="page" id="page-fundaciones">
+  <div class="ph"><div class="ptitle">Fundaciones</div><div class="psub">Base estratégica de tu agencia</div></div>
+  <div class="g2">
+    <div class="card cardg">
+      <div class="ch"><div class="ct">Avatar ideal</div><button class="btnp btn" onclick="saveF()">Guardar</button></div>
+      <div class="afield"><label class="albl">Nicho · Descripción · Ocupación</label><textarea class="ainp" id="f-nicho" placeholder="Ej: Editores de video freelance, nicho fitness..."></textarea></div>
+      <div class="afield"><label class="albl">Problemas principales</label><textarea class="ainp" id="f-problemas" placeholder="¿Qué le duele? ¿Qué lo frena?"></textarea></div>
+      <div class="afield"><label class="albl">Deseos principales</label><textarea class="ainp" id="f-deseos" placeholder="¿Qué quiere lograr?"></textarea></div>
+      <div class="afield"><label class="albl">Situación actual</label><textarea class="ainp" id="f-situacion" placeholder="Cómo está su vida/negocio ahora mismo..."></textarea></div>
+      <div class="afield"><label class="albl">Ingresos actuales</label><textarea class="ainp" id="f-ingresos" placeholder="Cuánto gana actualmente, cómo..."></textarea></div>
+      <div class="afield"><label class="albl">Objeciones frecuentes</label><textarea class="ainp" id="f-objeciones" placeholder="¿Qué dice para no comprar?"></textarea></div>
+      <div class="afield"><label class="albl">Ángulos de venta</label><textarea class="ainp" id="f-angulos-venta" placeholder="Ángulos que conectan con el avatar..."></textarea></div>
     </div>
-
-    <div class="metrics-grid">
-      <div class="metric">
-        <div class="metric-label">ingresos</div>
-        <div class="metric-value" id="m-ing">$0</div>
-        <div class="metric-delta up" id="md-ing"></div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">gastos</div>
-        <div class="metric-value" id="m-gas">$0</div>
-        <div class="metric-delta dn" id="md-gas"></div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">ganancia neta</div>
-        <div class="metric-value" id="m-net">$0</div>
-        <div class="metric-delta up"></div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">clientes activos</div>
-        <div class="metric-value" id="m-cli">0</div>
-        <div class="metric-delta up" id="md-cli"></div>
-      </div>
+    <div class="card cardg">
+      <div class="ch"><div class="ct">Oferta y servicio</div><button class="btnp btn" onclick="saveF()">Guardar</button></div>
+      <div class="afield"><label class="albl">Oferta mensaje corto</label><textarea class="ainp" id="f-oferta-corta" placeholder="En 1-2 líneas qué ofrecés..."></textarea></div>
+      <div class="afield"><label class="albl">Promesa de la oferta (bio de IG)</label><textarea class="ainp" id="f-promesa" placeholder="La promesa exacta para tu descripción de Instagram..."></textarea></div>
+      <div class="afield"><label class="albl">Mecanismo único</label><textarea class="ainp" id="f-mecanismo" placeholder="¿Qué hace diferente tu método?"></textarea></div>
+      <div class="afield"><label class="albl">Precio (pago único)</label><textarea class="ainp" id="f-precio" placeholder="Ej: .500 USD pago único..."></textarea></div>
+      <div class="afield"><label class="albl">Estructura de cobro (% o fijo)</label><textarea class="ainp" id="f-estructura" placeholder="Ej: 30% al inicio, 70% al finalizar / cuota fija de 00/mes..."></textarea></div>
     </div>
+  </div>
+</div>
 
-    <div class="two-col">
-      <div class="card">
-        <div class="card-header"><div class="card-title">Ingresos vs Gastos</div></div>
-        <div class="chart-wrap"><canvas id="chart-dash" role="img" aria-label="Gráfico ingresos y gastos">Comparativa ingresos y gastos.</canvas></div>
+<!-- ═══ CONTENIDO ═══ -->
+<div class="page" id="page-calendario">
+  <div class="ph" style="display:flex;align-items:center;justify-content:space-between">
+    <div><div class="ptitle">Calendario de contenido</div><div class="psub">Corto + Historias — Ordená tu semana</div></div>
+    <button class="btnp btn" onclick="openCM()">+ Nueva pieza</button>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div class="ftabs" id="cal-filter">
+      <button class="ftab active" onclick="setCF('todos',this)">Todos</button>
+      <button class="ftab" onclick="setCF('Reel',this)">Reels</button>
+      <button class="ftab" onclick="setCF('Carrusel',this)">Carruseles</button>
+      <button class="ftab" onclick="setCF('Historia',this)">Historias</button>
+    </div>
+    <div class="ftabs" id="cal-time">
+      <button class="ftab active" onclick="setCT('todo',this)">Todo</button>
+      <button class="ftab" onclick="setCT('mes',this)">Este mes</button>
+      <button class="ftab" onclick="setCT('semana',this)">Esta semana</button>
+      <button class="ftab" onclick="setCT('dia',this)">Hoy</button>
+    </div>
+  </div>
+  <div class="card cardg">
+    <div class="ch"><div class="ct">Calendario de posts</div></div>
+    <table class="tbl"><thead><tr><th>Fecha</th><th>Ángulo</th><th>Formato</th><th>Tipo</th><th>Hook</th><th>Guión</th><th>CTA</th><th>Estado</th><th></th></tr></thead><tbody id="cal-post-body"><tr><td colspan="9" style="color:var(--t3);text-align:center;padding:18px 0">Sin piezas. Agregá una.</td></tr></tbody></table>
+  </div>
+  <div class="card cardg" style="margin-top:14px">
+    <div class="ch"><div class="ct">Calendario de historias</div><button class="btnp btn" onclick="openHM()">+ Nueva historia</button></div>
+    <table class="tbl"><thead><tr><th>Fecha</th><th>Ángulo</th><th>Tipo</th><th>Formato</th><th>Hook</th><th>Guión</th><th>CTA</th><th>Estado</th><th></th></tr></thead><tbody id="cal-hist-body"><tr><td colspan="9" style="color:var(--t3);text-align:center;padding:18px 0">Sin historias.</td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- ═══ REFERENTES ═══ -->
+<div class="page" id="page-competencia">
+  <div class="ph" style="display:flex;align-items:center;justify-content:space-between">
+    <div><div class="ptitle">Referentes del Mercado</div><div class="psub">Análisis y seguimiento de perfiles</div></div>
+    <button class="btnp btn" onclick="openCompM()">+ Agregar referente</button>
+  </div>
+  <div class="card cardg"><div id="comp-list"><div style="color:var(--t3);text-align:center;padding:28px 0;font-size:13px">Sin referentes. Agregá uno.</div></div></div>
+</div>
+
+<!-- ═══ MÉTRICAS ═══ -->
+<div class="page" id="page-metricas">
+  <div class="ph" style="display:flex;align-items:center;justify-content:space-between">
+    <div><div class="ptitle">Métricas</div><div class="psub">Trazabilidad de Contenido</div></div>
+    <button class="btnp btn" onclick="openMetM()">+ Cargar métrica</button>
+  </div>
+  <div class="mgrid">
+    <div class="met"><div class="mlbl">Ángulo con más ventas</div><div class="mval" id="met-top" style="font-size:14px;margin-top:4px">—</div></div>
+    <div class="met"><div class="mlbl">Promedio seg. nuevos</div><div class="mval" id="met-seg">0</div></div>
+    <div class="met"><div class="mlbl">Leads generados</div><div class="mval" id="met-leads">0</div></div>
+    <div class="met"><div class="mlbl">Ventas realizadas</div><div class="mval" id="met-ventas">0</div></div>
+  </div>
+  <div class="card cardg">
+    <table class="tbl"><thead><tr><th>Fecha</th><th>Ángulo</th><th>Tipo</th><th>Leads</th><th>Comentarios</th><th>Ventas</th><th><span class="api-badge">API</span></th></tr></thead><tbody id="met-table"><tr><td colspan="7" style="color:var(--t3);text-align:center;padding:18px 0">Sin métricas</td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- ═══ LEADS ═══ -->
+<div class="page" id="page-leads">
+  <div class="ph" style="display:flex;align-items:center;justify-content:space-between">
+    <div><div class="ptitle">Leads</div><div class="psub">Pipeline de prospectos · Zapier ready</div></div>
+    <button class="btnp btn" onclick="openLeadM()">+ Nuevo lead</button>
+  </div>
+  <div class="card cardg">
+    <table class="tbl"><thead><tr><th>Nombre</th><th>Origen</th><th>Estado</th><th>Última acción</th><th>Notas</th><th></th></tr></thead><tbody id="leads-table"><tr><td colspan="6" style="color:var(--t3);text-align:center;padding:18px 0">Sin leads.</td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- ═══ CLIENTES ═══ -->
+<div class="page" id="page-clientes">
+  <div class="ph" style="display:flex;align-items:center;justify-content:space-between">
+    <div><div class="ptitle">Clientes</div><div class="psub" id="cli-lbl">0 clientes en programa</div></div>
+    <button class="btnp btn" onclick="openCliM()">+ Nuevo cliente</button>
+  </div>
+  <div class="card cardg">
+    <table class="tbl"><thead><tr><th>Fecha</th><th>Cliente</th><th>Inicio</th><th>Final</th><th>PP</th><th>Próximo paso</th><th>Estado</th><th></th></tr></thead><tbody id="clients-table"><tr><td colspan="8" style="color:var(--t3);text-align:center;padding:18px 0">Sin clientes.</td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- ═══ FINANZAS ═══ -->
+<div class="page" id="page-finanzas">
+  <div class="ph"><div class="ptitle">Finanzas</div><div class="psub">Ingresos · Egresos · Personal A · Personal B</div></div>
+  <div class="mgrid">
+    <div class="met"><div class="mlbl">Total ingresos</div><div class="mval" id="fin-ing">/bin/sh</div></div>
+    <div class="met"><div class="mlbl">Total egresos</div><div class="mval" id="fin-gas">/bin/sh</div></div>
+    <div class="met"><div class="mlbl">Personal A</div><div class="mval" id="fin-pa">/bin/sh</div></div>
+    <div class="met"><div class="mlbl">Personal B</div><div class="mval" id="fin-pb">/bin/sh</div></div>
+  </div>
+  <div class="g2">
+    <div class="card cardg">
+      <div class="ch"><div class="ct">Ingresos</div><button class="btnp btn" onclick="openIngM()">+ Ingreso</button></div>
+      <table class="tbl"><thead><tr><th>Concepto</th><th>Fecha</th><th>Monto</th><th>Tipo</th><th></th></tr></thead><tbody id="ing-table"><tr><td colspan="5" style="color:var(--t3);text-align:center;padding:16px 0">Sin ingresos</td></tr></tbody></table>
+    </div>
+    <div class="card cardg">
+      <div class="ch"><div class="ct">Egresos</div><button class="btnp btn" onclick="openGasM()">+ Egreso</button></div>
+      <table class="tbl"><thead><tr><th>Concepto</th><th>Fecha</th><th>Monto</th><th>Tipo</th><th></th></tr></thead><tbody id="gas-table"><tr><td colspan="5" style="color:var(--t3);text-align:center;padding:16px 0">Sin egresos</td></tr></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EXPORTAR ═══ -->
+<div class="page" id="page-exportar">
+  <div class="ph"><div class="ptitle">Exportar / Importar</div><div class="psub">Guardá o restaurá todos tus datos</div></div>
+  <div class="export-bar">
+    <div class="export-info"><strong>Backup de datos</strong> — Exportá todos tus datos en un archivo JSON que podés guardar en Drive, Dropbox o email. Para restaurar, importá el mismo archivo.</div>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button class="btnp btn" onclick="exportData()">Exportar datos</button>
+      <button class="btn" onclick="document.getElementById('import-file').click()">Importar datos</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+  </div>
+  <div class="card cardg">
+    <div class="ch"><div class="ct">Estado actual</div></div>
+    <div id="export-stats"></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="ch"><div class="ct">Integraciones futuras <span class="api-badge" style="margin-left:8px">API</span> <span class="api-badge scraped-badge" style="margin-left:4px">SCRAPED</span></div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px">
+      <div style="background:var(--s2);border-radius:var(--rs);padding:14px;border:1px solid var(--border)">
+        <div style="font-size:10px;font-weight:700;color:var(--blue);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Zapier / Make</div>
+        <div style="font-size:11px;color:var(--t2)">Automatizar leads desde Instagram DM, Calendly y WhatsApp</div>
+        <div class="api-badge" style="margin-top:8px">Próximamente</div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Últimos movimientos</div>
-          <button class="btn" onclick="nav('finanzas',document.querySelector('[onclick*=finanzas]'))">Ver todos</button>
-        </div>
-        <table class="tbl" id="dash-movs">
-          <thead><tr><th>Concepto</th><th>Tipo</th><th>Monto</th></tr></thead>
-          <tbody id="dash-movs-body"><tr><td colspan="3" style="color:var(--text3);text-align:center;padding:20px 0">Sin movimientos registrados</td></tr></tbody>
-        </table>
+      <div style="background:var(--s2);border-radius:var(--rs);padding:14px;border:1px solid var(--border)">
+        <div style="font-size:10px;font-weight:700;color:var(--purple);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Meta Business API</div>
+        <div style="font-size:11px;color:var(--t2)">Importar métricas automáticamente desde Instagram y Facebook</div>
+        <div class="api-badge scraped-badge" style="margin-top:8px">Próximamente</div>
+      </div>
+      <div style="background:var(--s2);border-radius:var(--rs);padding:14px;border:1px solid var(--border)">
+        <div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Apify Scraping</div>
+        <div style="font-size:11px;color:var(--t2)">Análisis automático de perfiles de referentes en Instagram</div>
+        <div class="api-badge scraped-badge" style="margin-top:8px">Próximamente</div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ═══════════════ ACCIONABLES ═══════════════ -->
-  <div class="page" id="page-accionables">
-    <div class="page-header">
-      <div class="page-title">Accionables</div>
-      <div class="page-sub">Roadmap de tareas — hacé clic para tachar lo que completaste</div>
-    </div>
-
-    <div class="three-col">
-      <div class="metric">
-        <div class="metric-label">completadas</div>
-        <div class="metric-value" id="ac-done">0</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">pendientes</div>
-        <div class="metric-value" id="ac-pend">0</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">progreso</div>
-        <div class="metric-value" id="ac-pct">0%</div>
-      </div>
-    </div>
-
-    <div class="prog-wrap">
-      <div class="prog-labels"><span>Progreso general</span><span id="ac-prog-label">0 / 0</span></div>
-      <div class="prog-bar"><div class="prog-fill" id="ac-prog-bar" style="width:0%"></div></div>
-    </div>
-
-    <div id="phases-container"></div>
+<!-- ═══ ÁNGULOS ═══ -->
+<div class="page" id="page-angulos">
+  <div class="ph" style="display:flex;align-items:center;justify-content:space-between">
+    <div><div class="ptitle">Ángulos</div><div class="psub">Biblioteca de ángulos y su performance</div></div>
+    <button class="btnp btn" onclick="openAngM()">+ Ángulo</button>
   </div>
-
-  <!-- ═══════════════ FUNDACIONES ═══════════════ -->
-  <div class="page" id="page-fundaciones">
-    <div class="page-header">
-      <div class="page-title">Fundaciones</div>
-      <div class="page-sub">La base estratégica de tu agencia</div>
-    </div>
-
-    <div class="two-col">
-      <div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Avatar ideal</div>
-            <button class="btn" onclick="saveFoundations()">Guardar</button>
-          </div>
-          <div class="av-field"><div class="av-label">Ocupación / Perfil</div><textarea class="av-inp" id="av-ocupacion" placeholder="Ej: Editores de video freelance, 22-35 años..."></textarea></div>
-          <div class="av-field"><div class="av-label">Problemas principales</div><textarea class="av-inp" id="av-problemas" placeholder="¿Qué le duele? ¿Qué lo frena?"></textarea></div>
-          <div class="av-field"><div class="av-label">Deseos principales</div><textarea class="av-inp" id="av-deseos" placeholder="¿Qué quiere lograr? ¿Cuál es su sueño?"></textarea></div>
-          <div class="av-field"><div class="av-label">Objeciones frecuentes</div><textarea class="av-inp" id="av-objeciones" placeholder="¿Qué dice para no comprar?"></textarea></div>
-          <div class="av-field"><div class="av-label">Ángulos de contenido</div><textarea class="av-inp" id="av-angulos" placeholder="Temas y enfoques que resuenan con el avatar..."></textarea></div>
-        </div>
-      </div>
-      <div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Oferta y servicio</div>
-            <button class="btn" onclick="saveFoundations()">Guardar</button>
-          </div>
-          <div class="av-field"><div class="av-label">Promesa principal (bio de IG)</div><textarea class="av-inp" id="av-promesa" placeholder="La promesa que va en tu descripción de Instagram..."></textarea></div>
-          <div class="av-field"><div class="av-label">Mecanismo único</div><textarea class="av-inp" id="av-mecanismo" placeholder="¿Qué hace diferente tu método?"></textarea></div>
-          <div class="av-field"><div class="av-label">Nicho específico</div><textarea class="av-inp" id="av-nicho" placeholder="A quién le hablás exactamente..."></textarea></div>
-          <div class="av-field"><div class="av-label">Precio y estructura de cobro</div><textarea class="av-inp" id="av-precio" placeholder="Ej: $900 USD/mes, cuota mensual, mínimo 3 meses..."></textarea></div>
-          <div class="av-field"><div class="av-label">Garantía</div><textarea class="av-inp" id="av-garantia" placeholder="Ej: Resultados o seguís gratis..."></textarea></div>
-        </div>
-      </div>
-    </div>
+  <div class="mgrid2" style="margin-bottom:14px">
+    <div class="met"><div class="mlbl">Ángulo con más ventas</div><div class="mval" id="ang-top-venta" style="font-size:16px;margin-top:4px">—</div></div>
+    <div class="met"><div class="mlbl">Mayor impacto (PC1 y PC2)</div><div class="mval" id="ang-top-impacto" style="font-size:16px;margin-top:4px">—</div></div>
   </div>
-
-  <!-- ═══════════════ CONTENIDO ═══════════════ -->
-  <div class="page" id="page-calendario">
-    <div class="page-header">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div class="page-title">Calendario de contenido</div>
-          <div class="page-sub" id="cal-month-label">Abril 2026</div>
-        </div>
-        <button class="btn btn-primary" onclick="openContentModal()">+ Nueva pieza</button>
-      </div>
-    </div>
-
-    <div class="ftabs" style="margin-bottom:16px" id="cal-filter">
-      <button class="ftab active" onclick="setCalFilter('todos',this)">Todos</button>
-      <button class="ftab" onclick="setCalFilter('Reel',this)">Reels</button>
-      <button class="ftab" onclick="setCalFilter('Carrusel',this)">Carrusels</button>
-      <button class="ftab" onclick="setCalFilter('Historia',this)">Historias</button>
-    </div>
-
-    <div class="card">
-      <div class="card-header"><div class="card-title">Esta semana</div></div>
-      <table class="tbl">
-        <thead><tr><th>Pieza</th><th>Tipo</th><th>Hook</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
-        <tbody id="content-table-body"><tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin piezas. Agregá una con el botón.</td></tr></tbody>
-      </table>
-    </div>
+  <div class="card cardg">
+    <div class="ch"><div class="ct">Todos los ángulos</div></div>
+    <table class="tbl"><thead><tr><th>Ángulo</th><th>Tipo</th><th>Primer contacto</th><th>Último contacto</th><th>Para AD</th><th>Ventas vinc.</th><th></th></tr></thead>
+    <tbody id="ang-table"><tr><td colspan="7" style="color:var(--t3);text-align:center;padding:18px 0">Sin ángulos. Agregá uno.</td></tr></tbody></table>
   </div>
-
-  <!-- ═══════════════ COMPETENCIA ═══════════════ -->
-  <div class="page" id="page-competencia">
-    <div class="page-header">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div class="page-title">Competencia</div>
-          <div class="page-sub">Análisis de perfiles y estrategias del mercado</div>
-        </div>
-        <button class="btn btn-primary" onclick="openCompModal()">+ Agregar competidor</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div id="comp-list"><div style="color:var(--text3);text-align:center;padding:30px 0;font-size:13px">Sin competidores. Agregá uno con el botón.</div></div>
-    </div>
-  </div>
-
-  <!-- ═══════════════ MÉTRICAS ═══════════════ -->
-  <div class="page" id="page-metricas">
-    <div class="page-header">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div class="page-title">Métricas de contenido</div>
-          <div class="page-sub">Rendimiento por pieza — qué funciona y qué no</div>
-        </div>
-        <button class="btn btn-primary" onclick="openMetricModal()">+ Cargar métrica</button>
-      </div>
-    </div>
-
-    <div class="three-col" id="met-cards">
-      <div class="metric"><div class="metric-label">mejor alcance</div><div class="metric-value" id="met-top">—</div></div>
-      <div class="metric"><div class="metric-label">promedio engagement</div><div class="metric-value" id="met-eng">0%</div></div>
-      <div class="metric"><div class="metric-label">leads generados</div><div class="metric-value" id="met-leads">0</div></div>
-    </div>
-
-    <div class="card">
-      <table class="tbl">
-        <thead><tr><th>Pieza</th><th>Tipo</th><th>Alcance</th><th>Likes</th><th>Leads</th><th>Score</th></tr></thead>
-        <tbody id="met-table"><tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin métricas cargadas aún</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ═══════════════ LEADS ═══════════════ -->
-  <div class="page" id="page-leads">
-    <div class="page-header">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div class="page-title">Pipeline de leads</div>
-          <div class="page-sub">Seguimiento de prospectos activos</div>
-        </div>
-        <button class="btn btn-primary" onclick="openLeadModal()">+ Nuevo lead</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <table class="tbl">
-        <thead><tr><th>Nombre</th><th>Origen</th><th>Estado</th><th>Última acción</th><th></th></tr></thead>
-        <tbody id="leads-table"><tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin leads. Agregá uno con el botón.</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ═══════════════ CLIENTES ═══════════════ -->
-  <div class="page" id="page-clientes">
-    <div class="page-header">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div class="page-title">Clientes activos</div>
-          <div class="page-sub" id="cli-count-label">0 clientes en programa</div>
-        </div>
-        <button class="btn btn-primary" onclick="openClientModal()">+ Nuevo cliente</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <table class="tbl">
-        <thead><tr><th>Cliente</th><th>Inicio</th><th>Cuota</th><th>Próximo pago</th><th>Estado</th><th></th></tr></thead>
-        <tbody id="clients-table"><tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin clientes aún</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ═══════════════ FINANZAS ═══════════════ -->
-  <div class="page" id="page-finanzas">
-    <div class="page-header">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div class="page-title">Finanzas</div>
-          <div class="page-sub">Ingresos y gastos detallados</div>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn" onclick="openIngModal()">+ Ingreso</button>
-          <button class="btn btn-primary" onclick="openGasModal()">+ Gasto</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="two-col">
-      <div class="card">
-        <div class="card-header"><div class="card-title">Ingresos</div></div>
-        <table class="tbl">
-          <thead><tr><th>Concepto</th><th>Cliente</th><th>Monto</th><th>Fecha</th><th></th></tr></thead>
-          <tbody id="ing-table"><tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin ingresos</td></tr></tbody>
-        </table>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">Gastos</div></div>
-        <table class="tbl">
-          <thead><tr><th>Concepto</th><th>Categoría</th><th>Monto</th><th>Fecha</th><th></th></tr></thead>
-          <tbody id="gas-table"><tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin gastos</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+</div>
 
 </div><!-- end main -->
 
-<!-- ═══════════════ MODALS ═══════════════ -->
+<!-- ══════════════ MODALS ══════════════ -->
 
-<!-- Content Modal -->
-<div class="modal-bg" id="modal-content">
+<!-- CONTENIDO POST -->
+<div class="mbg" id="m-content">
   <div class="modal">
-    <div class="modal-title">Nueva pieza de contenido</div>
-    <div class="modal-field"><div class="modal-label">Título / Tema</div><input class="inp" id="mc-titulo" placeholder="De qué trata..." style="width:100%"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-field"><div class="modal-label">Tipo</div>
-        <select class="sel" id="mc-tipo" style="width:100%"><option>Reel</option><option>Carrusel</option><option>Historia</option></select>
-      </div>
-      <div class="modal-field"><div class="modal-label">Estado</div>
-        <select class="sel" id="mc-estado" style="width:100%"><option>Idea</option><option>Guión listo</option><option>Grabando</option><option>Editando</option><option>Subido</option></select>
-      </div>
+    <div class="mtitle">Nueva pieza de contenido</div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Fecha</label><input class="inpf" type="date" id="mc-fecha"></div>
+      <div class="mfield"><label class="mlbl">Tipo</label><select class="selvf" id="mc-tipo"><option>Reel</option><option>Carrusel</option></select></div>
     </div>
-    <div class="modal-field"><div class="modal-label">Hook</div><input class="inp" id="mc-hook" placeholder="Primera frase gancho..." style="width:100%"></div>
-    <div class="modal-field"><div class="modal-label">Ángulo</div><input class="inp" id="mc-angulo" placeholder="El ángulo de este contenido..." style="width:100%"></div>
-    <div class="modal-field"><div class="modal-label">Fecha de publicación</div><input class="inp" type="date" id="mc-fecha" style="width:100%"></div>
-    <div class="modal-field"><div class="modal-label">Guión / Copy</div><textarea class="av-inp" id="mc-guion" placeholder="El guión completo..." style="min-height:80px"></textarea></div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('modal-content')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveContent()">Guardar</button>
+    <div class="mfield"><label class="mlbl">Ángulo</label><input class="inpf" id="mc-angulo" placeholder="El ángulo de esta pieza..."></div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Formato</label><input class="inpf" id="mc-formato" placeholder="Ej: Hablando a cámara, B-roll..."></div>
+      <div class="mfield"><label class="mlbl">CTA</label><input class="inpf" id="mc-cta" placeholder="Ej: Mandame DM, Comenta..."></div>
     </div>
+    <div class="mfield"><label class="mlbl">Hook</label><input class="inpf" id="mc-hook" placeholder="Primera frase gancho..."></div>
+    <div class="mfield"><label class="mlbl">Guión</label><textarea class="ainp" id="mc-guion" placeholder="El guión completo..." style="min-height:80px"></textarea></div>
+    <div class="mfield"><label class="mlbl">Estado</label><select class="selvf" id="mc-estado"><option>Idea</option><option>Guión listo</option><option>Grabando</option><option>Editando</option><option>Subido</option></select></div>
+    <div class="mact"><button class="btn" onclick="closeM('m-content')">Cancelar</button><button class="btnp btn" onclick="saveCont()">Guardar</button></div>
   </div>
 </div>
 
-<!-- Competitor Modal -->
-<div class="modal-bg" id="modal-comp">
+<!-- HISTORIA -->
+<div class="mbg" id="m-hist">
   <div class="modal">
-    <div class="modal-title">Agregar competidor</div>
-    <div class="modal-field"><div class="modal-label">Nombre / Handle</div><input class="inp" id="comp-nombre" placeholder="@handle" style="width:100%"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-field"><div class="modal-label">Link Instagram</div><input class="inp" id="comp-ig" placeholder="instagram.com/..." style="width:100%"></div>
-      <div class="modal-field"><div class="modal-label">Seguidores</div><input class="inp" type="number" id="comp-segs" placeholder="0" style="width:100%"></div>
+    <div class="mtitle">Nueva historia</div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Fecha</label><input class="inpf" type="date" id="mh-fecha"></div>
+      <div class="mfield"><label class="mlbl">Tipo</label><select class="selvf" id="mh-tipo"><option>Contenido de valor</option><option>Encuesta</option><option>Pregunta abierta</option><option>CTA / Venta</option><option>Detrás de escena</option><option>Reposter</option></select></div>
     </div>
-    <div class="modal-field"><div class="modal-label">Nicho</div><input class="inp" id="comp-nicho" placeholder="A qué nicho apunta..." style="width:100%"></div>
-    <div class="modal-field"><div class="modal-label">Oferta principal</div><input class="inp" id="comp-oferta" placeholder="Qué vende..." style="width:100%"></div>
-    <div class="modal-field"><div class="modal-label">Puntos fuertes</div><textarea class="av-inp" id="comp-fuertes" placeholder="En qué es bueno..." style="min-height:60px"></textarea></div>
-    <div class="modal-field"><div class="modal-label">Gaps / Oportunidades</div><textarea class="av-inp" id="comp-gaps" placeholder="En qué falla, qué podés hacer mejor..." style="min-height:60px"></textarea></div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('modal-comp')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveComp()">Guardar</button>
+    <div class="mfield"><label class="mlbl">Ángulo</label><input class="inpf" id="mh-angulo" placeholder="El ángulo..."></div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Formato</label><input class="inpf" id="mh-formato" placeholder="Ej: Sticker pregunta, video..."></div>
+      <div class="mfield"><label class="mlbl">CTA</label><input class="inpf" id="mh-cta" placeholder="Responde, manda DM..."></div>
     </div>
+    <div class="mfield"><label class="mlbl">Hook</label><input class="inpf" id="mh-hook" placeholder="Primer frame / texto..."></div>
+    <div class="mfield"><label class="mlbl">Guión</label><textarea class="ainp" id="mh-guion" placeholder="Copy de la historia..." style="min-height:60px"></textarea></div>
+    <div class="mfield"><label class="mlbl">Estado</label><select class="selvf" id="mh-estado"><option>Idea</option><option>Listo</option><option>Subido</option></select></div>
+    <div class="mact"><button class="btn" onclick="closeM('m-hist')">Cancelar</button><button class="btnp btn" onclick="saveHist()">Guardar</button></div>
   </div>
 </div>
 
-<!-- Metric Modal -->
-<div class="modal-bg" id="modal-metric">
+<!-- REFERENTE -->
+<div class="mbg" id="m-comp">
   <div class="modal">
-    <div class="modal-title">Cargar métrica</div>
-    <div class="modal-field"><div class="modal-label">Título del contenido</div><input class="inp" id="met-titulo" placeholder="Nombre de la pieza..." style="width:100%"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-field"><div class="modal-label">Tipo</div><select class="sel" id="met-tipo" style="width:100%"><option>Reel</option><option>Carrusel</option><option>Historia</option></select></div>
-      <div class="modal-field"><div class="modal-label">Alcance</div><input class="inp" type="number" id="met-alcance" placeholder="0" style="width:100%"></div>
+    <div class="mtitle">Agregar referente</div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Nombre / Perfil</label><input class="inpf" id="co-nombre" placeholder="@handle"></div>
+      <div class="mfield"><label class="mlbl">Link de Instagram</label><input class="inpf" id="co-ig" placeholder="instagram.com/..."></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-      <div class="modal-field"><div class="modal-label">Likes</div><input class="inp" type="number" id="met-likes" placeholder="0" style="width:100%"></div>
-      <div class="modal-field"><div class="modal-label">Comentarios</div><input class="inp" type="number" id="met-comments" placeholder="0" style="width:100%"></div>
-      <div class="modal-field"><div class="modal-label">Leads</div><input class="inp" type="number" id="met-leads-inp" placeholder="0" style="width:100%"></div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Seguidores</label><input class="inpf" type="number" id="co-segs" placeholder="0"></div>
+      <div class="mfield"><label class="mlbl">Nicho y oferta</label><input class="inpf" id="co-nicho" placeholder="Nicho + qué vende..."></div>
     </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('modal-metric')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveMetric()">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Lead Modal -->
-<div class="modal-bg" id="modal-lead">
-  <div class="modal">
-    <div class="modal-title">Nuevo lead</div>
-    <div class="modal-field"><div class="modal-label">Nombre</div><input class="inp" id="lead-nombre" placeholder="Nombre del prospecto..." style="width:100%"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-field"><div class="modal-label">Origen</div>
-        <select class="sel" id="lead-origen" style="width:100%"><option>Instagram DM</option><option>Referido</option><option>Reel viral</option><option>Historia</option><option>Otro</option></select>
+    <div class="mfield"><label class="mlbl">Recolectar (hooks · ideas · seguir)</label><textarea class="ainp" id="co-recolectar" placeholder="Anotá lo que más te sirvió de este perfil..." style="min-height:60px"></textarea></div>
+    <div class="mfield" style="background:var(--s2);border-radius:var(--rs);padding:10px;border:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span class="api-badge scraped-badge">API</span>
+        <span style="font-size:10px;font-weight:700;color:var(--t2);letter-spacing:0.04em;text-transform:uppercase">Conectar con API (Investigación y métricas)</span>
       </div>
-      <div class="modal-field"><div class="modal-label">Estado</div>
-        <select class="sel" id="lead-estado" style="width:100%"><option>Nuevo</option><option>Contactado</option><option>Llamada agendada</option><option>Propuesta enviada</option><option>Cerrado</option><option>Perdido</option></select>
+      <div class="mg2">
+        <div><label class="mlbl">Engagement rate</label><input class="inpf" id="co-eng" placeholder="Ej: 3.2% (futuro: auto)" style="opacity:0.6"></div>
+        <div><label class="mlbl">Último post</label><input class="inpf" id="co-lastpost" placeholder="Futuro: scraping auto" style="opacity:0.6"></div>
       </div>
     </div>
-    <div class="modal-field"><div class="modal-label">Última acción</div><input class="inp" id="lead-accion" placeholder="Qué hiciste con este lead..." style="width:100%"></div>
-    <div class="modal-field"><div class="modal-label">Notas</div><textarea class="av-inp" id="lead-notas" placeholder="Info adicional del lead..." style="min-height:60px"></textarea></div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('modal-lead')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveLead()">Guardar</button>
-    </div>
+    <div class="mact"><button class="btn" onclick="closeM('m-comp')">Cancelar</button><button class="btnp btn" onclick="saveComp()">Guardar</button></div>
   </div>
 </div>
 
-<!-- Client Modal -->
-<div class="modal-bg" id="modal-client">
+<!-- MÉTRICA -->
+<div class="mbg" id="m-met">
   <div class="modal">
-    <div class="modal-title">Nuevo cliente</div>
-    <div class="modal-field"><div class="modal-label">Nombre</div><input class="inp" id="cli-nombre" placeholder="Nombre del cliente..." style="width:100%"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-field"><div class="modal-label">Fecha de inicio</div><input class="inp" type="date" id="cli-inicio" style="width:100%"></div>
-      <div class="modal-field"><div class="modal-label">Cuota mensual (USD)</div><input class="inp" type="number" id="cli-cuota" placeholder="900" style="width:100%"></div>
+    <div class="mtitle">Cargar métrica</div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Fecha</label><input class="inpf" type="date" id="mm-fecha"></div>
+      <div class="mfield"><label class="mlbl">Tipo</label><select class="selvf" id="mm-tipo"><option>Reel</option><option>Carrusel</option><option>Historia</option></select></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-field"><div class="modal-label">Próximo pago</div><input class="inp" type="date" id="cli-proxpago" style="width:100%"></div>
-      <div class="modal-field"><div class="modal-label">Estado</div>
-        <select class="sel" id="cli-estado" style="width:100%"><option>Al día</option><option>Pendiente</option><option>Vencido</option><option>Inactivo</option></select>
+    <div class="mfield"><label class="mlbl">Ángulo del contenido</label><input class="inpf" id="mm-angulo" placeholder="El ángulo usado..."></div>
+    <div class="mfield"><label class="mlbl">CTA</label><input class="inpf" id="mm-cta" placeholder="El CTA que usaste..."></div>
+    <div class="mg3">
+      <div class="mfield"><label class="mlbl">Comentarios</label><input class="inpf" type="number" id="mm-comments" placeholder="0"></div>
+      <div class="mfield"><label class="mlbl">Seguidores nuevos</label><input class="inpf" type="number" id="mm-segs" placeholder="0"></div>
+      <div class="mfield"><label class="mlbl">Leads</label><input class="inpf" type="number" id="mm-leads" placeholder="0"></div>
+    </div>
+    <div class="mfield"><label class="mlbl">Ventas (nombre del cliente)</label><input class="inpf" id="mm-ventas" placeholder="Ej: Martín R., Lucía V."></div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Primer contacto de</label><input class="inpf" id="mm-primer" placeholder="Nombre del lead..."></div>
+      <div class="mfield"><label class="mlbl">Último contacto de</label><input class="inpf" id="mm-ultimo" placeholder="Nombre del lead..."></div>
+    </div>
+    <div class="mact"><button class="btn" onclick="closeM('m-met')">Cancelar</button><button class="btnp btn" onclick="saveMet()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- LEAD -->
+<div class="mbg" id="m-lead">
+  <div class="modal">
+    <div class="mtitle">Nuevo lead</div>
+    <div class="mfield"><label class="mlbl">Nombre y apellido</label><input class="inpf" id="ll-nombre" placeholder="Nombre completo..."></div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Origen</label><select class="selvf" id="ll-origen"><option>Outbound</option><option>Inbound</option><option>ADS</option><option>Referidos</option><option>Historia</option><option>Otro</option></select></div>
+      <div class="mfield"><label class="mlbl">Estado</label><select class="selvf" id="ll-estado"><option>Nuevo</option><option>Contactado</option><option>Agendado</option><option>Seguimiento</option><option>Cerrado</option><option>Perdido</option></select></div>
+    </div>
+    <div class="mfield"><label class="mlbl">Última acción</label><input class="inpf" id="ll-accion" placeholder="Qué hiciste con este lead..."></div>
+    <div class="mfield"><label class="mlbl">Notas</label><textarea class="ainp" id="ll-notas" placeholder="Info adicional..." style="min-height:60px"></textarea></div>
+    <div class="mact"><button class="btn" onclick="closeM('m-lead')">Cancelar</button><button class="btnp btn" onclick="saveLead()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- CLIENTE -->
+<div class="mbg" id="m-cli">
+  <div class="modal">
+    <div class="mtitle">Nuevo cliente</div>
+    <div class="mfield"><label class="mlbl">Nombre y apellido</label><input class="inpf" id="cl-nombre" placeholder="Nombre completo..."></div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Fecha de inicio</label><input class="inpf" type="date" id="cl-inicio"></div>
+      <div class="mfield"><label class="mlbl">Fecha de finalización</label><input class="inpf" type="date" id="cl-fin"></div>
+    </div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Plan de pago</label><select class="selvf" id="cl-pp"><option>PIF</option><option>CUOTA</option><option>RESELL</option><option>UPSELL</option><option>DOWNSELL</option></select></div>
+      <div class="mfield"><label class="mlbl">Modalidad</label><select class="selvf" id="cl-modal"><option>Único</option><option>Cuota</option><option>Fecha específica</option></select></div>
+    </div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Próximo pago</label><input class="inpf" type="date" id="cl-proxpago"></div>
+      <div class="mfield"><label class="mlbl">Estado</label><select class="selvf" id="cl-estado"><option>Al día</option><option>Pendiente</option><option>Vencido</option><option>Inactivo</option></select></div>
+    </div>
+    <div class="mfield"><label class="mlbl">Próximo paso</label><input class="inpf" id="cl-proxpaso" placeholder="Qué sigue con este cliente..."></div>
+    <div class="mfield"><label class="mlbl">Roadmap (link)</label><input class="inpf" id="cl-roadmap" placeholder="Link al Miro o Notion del cliente..."></div>
+    <div class="mact"><button class="btn" onclick="closeM('m-cli')">Cancelar</button><button class="btnp btn" onclick="saveCli()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- INGRESO -->
+<div class="mbg" id="m-ing">
+  <div class="modal">
+    <div class="mtitle">Nuevo ingreso</div>
+    <div class="mfield"><label class="mlbl">Concepto</label><select class="selvf" id="ing-concepto"><option>Venta Nueva</option><option>Cuota</option><option>Venta Interna</option><option>Personal</option></select></div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Fecha</label><input class="inpf" type="date" id="ing-fecha"></div>
+      <div class="mfield"><label class="mlbl">Tipo</label><select class="selvf" id="ing-tipo"><option>Cliente</option><option>Cambio</option></select></div>
+    </div>
+    <div class="mg3">
+      <div class="mfield"><label class="mlbl">Monto USD</label><input class="inpf" type="number" id="ing-usd" placeholder="0"></div>
+      <div class="mfield"><label class="mlbl">Monto ARS</label><input class="inpf" type="number" id="ing-ars" placeholder="0"></div>
+      <div class="mfield"><label class="mlbl">Monto EUR</label><input class="inpf" type="number" id="ing-eur" placeholder="0"></div>
+    </div>
+    <div class="mact"><button class="btn" onclick="closeM('m-ing')">Cancelar</button><button class="btnp btn" onclick="saveIng()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- EGRESO -->
+<div class="mbg" id="m-gas">
+  <div class="modal">
+    <div class="mtitle">Nuevo egreso</div>
+    <div class="mfield"><label class="mlbl">Concepto</label><input class="inpf" id="gas-concepto" placeholder="Descripción del gasto..."></div>
+    <div class="mg2">
+      <div class="mfield"><label class="mlbl">Fecha</label><input class="inpf" type="date" id="gas-fecha"></div>
+      <div class="mfield"><label class="mlbl">Tipo</label><select class="selvf" id="gas-tipo"><option>Retiro A</option><option>Retiro B</option><option>Gasto Personal</option><option>Gasto Empresa</option><option>ADS</option></select></div>
+    </div>
+    <div class="mg3">
+      <div class="mfield"><label class="mlbl">Monto USD</label><input class="inpf" type="number" id="gas-usd" placeholder="0"></div>
+      <div class="mfield"><label class="mlbl">Monto ARS</label><input class="inpf" type="number" id="gas-ars" placeholder="0"></div>
+      <div class="mfield"><label class="mlbl">Monto EUR</label><input class="inpf" type="number" id="gas-eur" placeholder="0"></div>
+    </div>
+    <div class="mfield"><label class="mlbl">Categoría</label><select class="selvf" id="gas-cat"><option>Retiro</option><option>Pago</option><option>Marketing</option><option>Ventas</option><option>Producto</option><option>Operaciones</option><option>Empleados</option></select></div>
+    <div class="mact"><button class="btn" onclick="closeM('m-gas')">Cancelar</button><button class="btnp btn" onclick="saveGas()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- ÁNGULO MODAL -->
+<div class="mbg" id="m-ang">
+  <div class="modal">
+    <div class="mtitle">Nuevo ángulo</div>
+    <div class="mfield"><label class="mlbl">Ángulo</label><input class="inpf" id="ang-angulo" placeholder="Describí el ángulo..."></div>
+    <div class="mfield"><label class="mlbl">Tipo</label>
+      <select class="selvf" id="ang-tipo">
+        <option>Problema</option><option>Solución</option><option>Producto</option>
+        <option>Mentalidad</option><option>Volumen</option><option>Otro</option>
+      </select>
+    </div>
+    <div class="mfield">
+      <label class="mlbl">Primer contacto (nombres de clientes)</label>
+      <div id="ang-primer-list" style="margin-bottom:6px"></div>
+      <div style="display:flex;gap:6px">
+        <input class="inpf" id="ang-primer-inp" placeholder="Nombre del cliente..." style="flex:1">
+        <button class="btnp btn" onclick="addAngContact('primer')">+</button>
+      </div>
+      <div style="font-size:9px;color:var(--t3);margin-top:4px;letter-spacing:0.04em">Se vincula con Métricas de Contenido y Clientes</div>
+    </div>
+    <div class="mfield">
+      <label class="mlbl">Último contacto (nombres de clientes)</label>
+      <div id="ang-ultimo-list" style="margin-bottom:6px"></div>
+      <div style="display:flex;gap:6px">
+        <input class="inpf" id="ang-ultimo-inp" placeholder="Nombre del cliente..." style="flex:1">
+        <button class="btnp btn" onclick="addAngContact('ultimo')">+</button>
       </div>
     </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('modal-client')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveClient()">Guardar</button>
+    <div class="mfield"><label class="mlbl">Para AD</label>
+      <select class="selvf" id="ang-ad"><option>No</option><option>Sí</option></select>
     </div>
+    <div class="mact"><button class="btn" onclick="closeM('m-ang')">Cancelar</button><button class="btnp btn" onclick="saveAng()">Guardar</button></div>
   </div>
 </div>
 
-<!-- Ingreso Modal -->
-<div class="modal-bg" id="modal-ing">
-  <div class="modal">
-    <div class="modal-title">Nuevo ingreso</div>
-    <div class="modal-field"><div class="modal-label">Concepto</div><input class="inp" id="ing-concepto" placeholder="Ej: Cuota mensual Franco..." style="width:100%"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-field"><div class="modal-label">Monto (USD)</div><input class="inp" type="number" id="ing-monto" placeholder="0" style="width:100%"></div>
-      <div class="modal-field"><div class="modal-label">Fecha</div><input class="inp" type="date" id="ing-fecha" style="width:100%"></div>
-    </div>
-    <div class="modal-field"><div class="modal-label">Cliente</div><input class="inp" id="ing-cliente" placeholder="Nombre del cliente..." style="width:100%"></div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('modal-ing')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveIngreso()">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Gasto Modal -->
-<div class="modal-bg" id="modal-gas">
-  <div class="modal">
-    <div class="modal-title">Nuevo gasto</div>
-    <div class="modal-field"><div class="modal-label">Concepto</div><input class="inp" id="gas-concepto" placeholder="Ej: CapCut Pro..." style="width:100%"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-field"><div class="modal-label">Monto (USD)</div><input class="inp" type="number" id="gas-monto" placeholder="0" style="width:100%"></div>
-      <div class="modal-field"><div class="modal-label">Fecha</div><input class="inp" type="date" id="gas-fecha" style="width:100%"></div>
-    </div>
-    <div class="modal-field"><div class="modal-label">Categoría</div>
-      <select class="sel" id="gas-cat" style="width:100%"><option>Software</option><option>Publicidad</option><option>Equipo humano</option><option>Hardware</option><option>Formación</option><option>Impuestos</option><option>Otro</option></select>
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('modal-gas')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveGasto()">Guardar</button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
-
 <script>
-// ═══════════════ STATE ═══════════════
-const KEYS = {
-  tasks: 'exp_tasks',
-  foundations: 'exp_foundations',
-  content: 'exp_content',
-  competitors: 'exp_competitors',
-  metrics: 'exp_metrics',
-  leads: 'exp_leads',
-  clients: 'exp_clients',
-  ingresos: 'exp_ingresos',
-  gastos: 'exp_gastos',
+const K={tasks:'exp2_tasks',found:'exp2_found',content:'exp2_content',hists:'exp2_hists',comps:'exp2_comps',mets:'exp2_mets',leads:'exp2_leads',clients:'exp2_clients',ing:'exp2_ing',gas:'exp2_gas',angulos:'exp2_angulos'};
+function ld(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+
+const PHASES={
+  f1:{label:'Fase 1 — Onboarding',ps:'background:rgba(68,119,187,0.12);color:#4477bb',badge:'bb',items:[
+    'Ver el Pre-Onboarding y agendar llamada con Nahuel',
+    'Ver el Módulo 1',
+    'Ver el Módulo 2',
+  ]},
+  f2:{label:'Fase 2 — Fundaciones',ps:'background:rgba(212,175,55,0.1);color:#d4af37',badge:'bg',items:[
+    'Ver el Módulo 2 y 3 y completar los documentos',
+    'Definir Nicho y Subnicho',
+    'Definir Cliente ideal PC 1, 2 y 3',
+    'Oferta creada',
+    'Promesa creada (Para Bio)',
+    'Documento de Avatar completo',
+    'Documento de Oferta OER completo',
+    'Oferta, Precio y Entregables armados',
+    'Roadmap del Cliente hecho (Miro)',
+  ]},
+  f3:{label:'Fase 3 — Contenido',ps:'background:rgba(74,158,106,0.1);color:#4a9e6a',badge:'bgr',items:[
+    'Ver el Módulo 4',
+    'Crear cuenta fantasma',
+    'Anotar 5-10 Referentes (Posicionamiento)',
+    'Seguir a 30-40 Referentes (Contenido)',
+    'Tener el Avatar - Oferta - Servicio (Definido)',
+    'Tengo el Notion Completo (Estrategia de Marca)',
+    'Agendar 1-1 con Alex (Estrategia de Contenido)',
+    'Optimización de perfil (Foto - Desc cambiada)',
+    'Historia Destacada "Que hago" (Creada)',
+    'Historia Destacada "Quien soy" (Creada)',
+    'Reel/Carrusel "Que hago" (Creado)',
+    'Reel/Carrusel "Que Logre" (Creado)',
+    'Reel/Carrusel "Quien soy" (Creado)',
+    'Anotar las metricas (Hecho)',
+  ]},
+  f4:{label:'Fase 4 — Ventas',ps:'background:rgba(136,85,204,0.1);color:#8855cc',badge:'bp',items:[
+    'Ver el Módulo 5',
+    'Armar tu estructura de prospección',
+    'Buscar y anotar +100 leads (Para prospectar)',
+    'Tengo mi CRM (Para métricas de prospección)',
+    'Revise Chats con Lucas',
+    'Arme las automatizaciones de Manychat',
+    'Tengo el Guión de Ventas',
+    'Ya agende mi primer llamada',
+    'Ya revise las llamadas con Guido',
+    'Cerré mi primer venta',
+    'Mejoré mi AOV',
+  ]},
+  f5:{label:'Fase 5 — Sistemas',ps:'background:rgba(204,85,85,0.1);color:#cc5555',badge:'br',items:[
+    'Tengo el Calendly configurado (preguntas y horarios)',
+    'Conecté Zapier a Calendly y Whatsapp (EOD)',
+    'Armé las etapas del servicio (Roadmap de Cliente)',
+    'Tengo la trazabilidad hecha de mi contenido',
+    'Tengo la trazabilidad hecha de mis llamadas',
+    'Tengo Ángulos de Venta',
+    'Tengo Ángulos de Contenido',
+    'Tengo Claude con el negocio (Información)',
+    'Armé SOPs para contratar equipo',
+    'Contraté un Editor',
+    'Prendí ADS',
+  ]}
 };
 
-function load(key, def) {
-  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; }
-}
-function save(key, val) {
-  try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
-}
-
-const INIT_TASKS = {
-  f1: {
-    label: 'Fase 1 — Fundaciones', color: 'b-blue',
-    phase_style: 'background:var(--blue-bg);color:var(--blue-text)',
-    items: [
-      {t:'Completar el perfil del avatar ideal', p:'alta', done:false},
-      {t:'Escribir la promesa principal de la oferta', p:'alta', done:false},
-      {t:'Documentar precio y estructura de cobro', p:'alta', done:false},
-      {t:'Definir nicho y sub-nicho específico', p:'media', done:false},
-      {t:'Armar librería de ángulos de contenido', p:'media', done:false},
-    ]
-  },
-  f2: {
-    label: 'Fase 2 — Contenido', color: 'b-amber',
-    phase_style: 'background:var(--amber-bg);color:var(--amber-text)',
-    items: [
-      {t:'Grabar 4 reels de la semana', p:'alta', done:false},
-      {t:'Publicar 2 carrusels esta semana', p:'alta', done:false},
-      {t:'Analizar métricas del mes anterior', p:'media', done:false},
-      {t:'Preparar hooks para próximo mes', p:'media', done:false},
-      {t:'Documentar caso de éxito de cliente', p:'baja', done:false},
-    ]
-  },
-  f3: {
-    label: 'Fase 3 — Ventas', color: 'b-green',
-    phase_style: 'background:var(--accent-bg);color:var(--accent-text)',
-    items: [
-      {t:'Agendar 5 llamadas de ventas esta semana', p:'alta', done:false},
-      {t:'Follow-up a leads sin respuesta', p:'alta', done:false},
-      {t:'Optimizar guión de cierre', p:'media', done:false},
-      {t:'Configurar respuestas automáticas en IG', p:'baja', done:false},
-    ]
-  },
-  f4: {
-    label: 'Fase 4 — Escala', color: 'b-purple',
-    phase_style: 'background:var(--purple-bg);color:var(--purple-text)',
-    items: [
-      {t:'Conectar Calendly con WhatsApp vía Zapier', p:'alta', done:false},
-      {t:'Automatizar notificaciones de nuevas llamadas', p:'alta', done:false},
-      {t:'Armar SOP de onboarding de clientes', p:'media', done:false},
-      {t:'Contratar editor de confianza', p:'media', done:false},
-      {t:'Crear reporte mensual para clientes', p:'baja', done:false},
-    ]
-  }
-};
-
-let state = {
-  tasks: load(KEYS.tasks, JSON.parse(JSON.stringify(INIT_TASKS))),
-  foundations: load(KEYS.foundations, {}),
-  content: load(KEYS.content, []),
-  competitors: load(KEYS.competitors, []),
-  metrics: load(KEYS.metrics, []),
-  leads: load(KEYS.leads, []),
-  clients: load(KEYS.clients, []),
-  ingresos: load(KEYS.ingresos, []),
-  gastos: load(KEYS.gastos, []),
-};
-
-let dashChart = null;
-let dashFilter = 'mes';
-let calFilter = 'todos';
-
-// ═══════════════ NAV ═══════════════
-function nav(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  if (el) el.classList.add('active');
-  if (id === 'dashboard') renderDashboard();
-  if (id === 'accionables') renderTasks();
-  if (id === 'fundaciones') renderFoundations();
-  if (id === 'calendario') renderContent();
-  if (id === 'competencia') renderCompetitors();
-  if (id === 'metricas') renderMetrics();
-  if (id === 'leads') renderLeads();
-  if (id === 'clientes') renderClients();
-  if (id === 'finanzas') renderFinanzas();
-}
-
-// ═══════════════ TOAST ═══════════════
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
-}
-
-// ═══════════════ MODALS ═══════════════
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-
-document.querySelectorAll('.modal-bg').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
-});
-
-// ═══════════════ DASHBOARD ═══════════════
-const dashData = {
-  dia:    { ing: 420, gas: 85, labels: ['9am','11am','1pm','3pm','5pm'], d_ing: [0,180,80,0,160], d_gas: [0,49,0,0,36] },
-  semana: { ing: 2100, gas: 380, labels: ['Lun','Mar','Mié','Jue','Vie'], d_ing: [900,0,600,0,600], d_gas: [65,0,180,0,135] },
-  mes:    { ing: 0, gas: 0, labels: ['Sem 1','Sem 2','Sem 3','Sem 4'], d_ing: [0,0,0,0], d_gas: [0,0,0,0] },
-  año:    { ing: 0, gas: 0, labels: ['Ene','Feb','Mar','Abr'], d_ing: [0,0,0,0], d_gas: [0,0,0,0] },
-};
-
-function setDashFilter(f, el) {
-  dashFilter = f;
-  document.querySelectorAll('#dash-filter .ftab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderDashboard();
-}
-
-function renderDashboard() {
-  const totalIng = state.ingresos.reduce((s,i) => s + Number(i.monto), 0);
-  const totalGas = state.gastos.reduce((s,g) => s + Number(g.monto), 0);
-  const activeCli = state.clients.filter(c => c.estado === 'Al día' || c.estado === 'Pendiente').length;
-
-  document.getElementById('m-ing').textContent = '$' + totalIng.toLocaleString();
-  document.getElementById('m-gas').textContent = '$' + totalGas.toLocaleString();
-  document.getElementById('m-net').textContent = '$' + (totalIng - totalGas).toLocaleString();
-  document.getElementById('m-cli').textContent = activeCli;
-
-  // chart
-  const d = dashData[dashFilter];
-  const ingArr = dashFilter === 'mes' || dashFilter === 'año'
-    ? d.labels.map(() => Math.round(totalIng / d.labels.length))
-    : d.d_ing;
-  const gasArr = dashFilter === 'mes' || dashFilter === 'año'
-    ? d.labels.map(() => Math.round(totalGas / d.labels.length))
-    : d.d_gas;
-
-  const ctx = document.getElementById('chart-dash');
-  if (dashChart) dashChart.destroy();
-  dashChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: d.labels,
-      datasets: [
-        { label: 'Ingresos', data: ingArr, backgroundColor: '#d8f3dc', borderRadius: 5 },
-        { label: 'Gastos', data: gasArr, backgroundColor: '#fee2e2', borderRadius: 5 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#9e9d97' } },
-        y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { font: { size: 11 }, color: '#9e9d97', callback: v => '$' + v } }
-      }
-    }
+function initTasks(){
+  const t={};
+  Object.entries(PHASES).forEach(([k,p])=>{
+    t[k]={label:p.label,ps:p.ps,badge:p.badge,items:p.items.map(i=>({t:i,done:false}))};
   });
-
-  // movs
-  const allMovs = [
-    ...state.ingresos.map(i => ({ concepto: i.concepto, tipo: 'Ingreso', monto: '+$' + Number(i.monto).toLocaleString(), fecha: i.fecha })),
-    ...state.gastos.map(g => ({ concepto: g.concepto, tipo: 'Gasto', monto: '-$' + Number(g.monto).toLocaleString(), fecha: g.fecha }))
-  ].sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).slice(0, 6);
-
-  const tbody = document.getElementById('dash-movs-body');
-  if (allMovs.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="3" style="color:var(--text3);text-align:center;padding:20px 0">Sin movimientos. Agregá ingresos o gastos.</td></tr>';
-  } else {
-    tbody.innerHTML = allMovs.map(m => `
-      <tr>
-        <td>${m.concepto}</td>
-        <td><span class="badge ${m.tipo==='Ingreso'?'b-green':'b-red'}">${m.tipo}</span></td>
-        <td style="font-family:'DM Mono',monospace">${m.monto}</td>
-      </tr>`).join('');
-  }
+  return t;
 }
 
-// ═══════════════ ACCIONABLES ═══════════════
-function renderTasks() {
-  const container = document.getElementById('phases-container');
-  container.innerHTML = '';
-  let total = 0, done = 0;
+let S={
+  tasks:ld(K.tasks,initTasks()),
+  found:ld(K.found,{}),
+  content:ld(K.content,[]),
+  hists:ld(K.hists,[]),
+  comps:ld(K.comps,[]),
+  mets:ld(K.mets,[]),
+  leads:ld(K.leads,[]),
+  clients:ld(K.clients,[]),
+  ing:ld(K.ing,[]),
+  gas:ld(K.gas,[]),
+  angulos:ld(K.angulos,[]),
+};
 
-  Object.entries(state.tasks).forEach(([phaseKey, phase]) => {
-    const pDone = phase.items.filter(t => t.done).length;
-    total += phase.items.length;
-    done += pDone;
+let dc=null,df='mes',cf='todos',ct='todo';
 
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.innerHTML = `
-      <div class="card-header">
-        <div>
-          <div class="phase-tag" style="${phase.phase_style}">${phase.label}</div>
-          <div class="card-title" style="margin-top:2px">${pDone} de ${phase.items.length} completadas</div>
-        </div>
-        <span class="badge ${phase.color}">${pDone}/${phase.items.length}</span>
-      </div>
-      <div id="task-list-${phaseKey}"></div>
-      <div class="add-row">
-        <input class="inp" id="task-inp-${phaseKey}" placeholder="Nueva tarea...">
-        <select class="sel" id="task-pri-${phaseKey}"><option value="alta">Alta</option><option value="media" selected>Media</option><option value="baja">Baja</option></select>
-        <button class="btn btn-primary" onclick="addTask('${phaseKey}')">Agregar</button>
-      </div>`;
-    container.appendChild(div);
+// NAV
+function nav(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  const fn={dashboard:renderDash,accionables:renderTasks,fundaciones:renderF,calendario:renderCal,competencia:renderComps,metricas:renderMets,leads:renderLeads,clientes:renderClis,finanzas:renderFin,exportar:renderExport,angulos:renderAngulos};
+  if(fn[id])fn[id]();
+}
 
-    const list = document.getElementById('task-list-' + phaseKey);
-    phase.items.forEach((task, idx) => {
-      const item = document.createElement('div');
-      item.className = 'task-item';
-      item.onclick = () => toggleTask(phaseKey, idx);
-      item.innerHTML = `
-        <div class="chk ${task.done ? 'done' : ''}"></div>
-        <div>
-          <div class="task-text ${task.done ? 'done' : ''}">${task.t}</div>
-          <div style="font-size:10px;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace">${task.p} prioridad</div>
-        </div>`;
+// TOAST
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+function openM(id){document.getElementById(id).classList.add('open');}
+document.querySelectorAll('.mbg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+// DASHBOARD
+function setDF(f,el){df=f;document.querySelectorAll('#dash-filter .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderDash();}
+function renderDash(){
+  const ti=S.ing.reduce((s,i)=>s+Number(i.usd||0),0);
+  const tg=S.gas.reduce((s,g)=>s+Number(g.usd||0),0);
+  const pa=S.gas.filter(g=>g.tipo==='Retiro A').reduce((s,g)=>s+Number(g.usd||0),0);
+  const pb=S.gas.filter(g=>g.tipo==='Retiro B').reduce((s,g)=>s+Number(g.usd||0),0);
+  const ac=S.clients.filter(c=>c.estado==='Al día'||c.estado==='Pendiente').length;
+  document.getElementById('m-ing').textContent='$'+ti.toLocaleString();
+  document.getElementById('m-gas').textContent='$'+tg.toLocaleString();
+  document.getElementById('m-net').textContent='$'+(ti-tg).toLocaleString();
+  document.getElementById('m-cli').textContent=ac;
+  document.getElementById('m-pa').textContent='$'+pa.toLocaleString();
+  document.getElementById('m-pb').textContent='$'+pb.toLocaleString();
+  const lbls={dia:['9am','11am','1pm','3pm','5pm'],semana:['Lun','Mar','Mié','Jue','Vie'],mes:['Sem 1','Sem 2','Sem 3','Sem 4'],año:['Ene','Feb','Mar','Abr','May','Jun']};
+  const n=lbls[df].length;
+  const ia=lbls[df].map(()=>Math.round(ti/n));const ga=lbls[df].map(()=>Math.round(tg/n));
+  const ctx=document.getElementById('chart-dash');
+  if(dc)dc.destroy();
+  dc=new Chart(ctx,{type:'bar',data:{labels:lbls[df],datasets:[{label:'Ingresos',data:ia,backgroundColor:'rgba(212,175,55,0.28)',borderColor:'rgba(212,175,55,0.5)',borderWidth:1,borderRadius:4},{label:'Egresos',data:ga,backgroundColor:'rgba(204,85,85,0.18)',borderColor:'rgba(204,85,85,0.35)',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#484840'}},y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{font:{size:11},color:'#484840',callback:v=>'$'+v}}}}});
+  const movs=[...S.ing.map(i=>({c:i.concepto,t:'Ingreso',m:'+$'+Number(i.usd||0).toLocaleString()+' USD',f:i.fecha})),...S.gas.map(g=>({c:g.concepto,t:'Egreso',m:'-$'+Number(g.usd||0).toLocaleString()+' USD',f:g.fecha}))].sort((a,b)=>new Date(b.f)-new Date(a.f)).slice(0,6);
+  document.getElementById('dash-movs').innerHTML=movs.length===0?'<tr><td colspan="3" style="color:var(--t3);text-align:center;padding:18px 0">Sin movimientos</td></tr>':movs.map(m=>`<tr><td>${m.c}</td><td><span class="badge ${m.t==='Ingreso'?'bg':'br'}">${m.t}</span></td><td style="font-weight:700">${m.m}</td></tr>`).join('');
+}
+
+// TASKS
+function renderTasks(){
+  const cont=document.getElementById('phases-cont');cont.innerHTML='';
+  let total=0,done=0;
+  Object.entries(S.tasks).forEach(([pk,phase])=>{
+    const pd=phase.items.filter(t=>t.done).length;total+=phase.items.length;done+=pd;
+    const div=document.createElement('div');div.className='card cardg';
+    div.innerHTML=`<div class="ch"><div><div class="ptag" style="${phase.ps}">${phase.label}</div><div class="ct" style="margin-top:3px">${pd} de ${phase.items.length} completadas</div></div><span class="badge ${phase.badge}">${pd}/${phase.items.length}</span></div><div id="tl-${pk}"></div><div class="addrow"><input class="inp" id="ti-${pk}" placeholder="Nueva tarea..."><button class="btnp btn" onclick="addT('${pk}')">+</button></div>`;
+    cont.appendChild(div);
+    const list=document.getElementById('tl-'+pk);
+    phase.items.forEach((task,idx)=>{
+      const item=document.createElement('div');item.className='ti';item.onclick=()=>togT(pk,idx);
+      item.innerHTML=`<div class="chk ${task.done?'done':''}"></div><div style="flex:1"><div class="tt ${task.done?'done':''}">${task.t}</div></div><button onclick="event.stopPropagation();delT('${pk}',${idx})" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:16px;padding:0 4px;line-height:1">×</button>`;
       list.appendChild(item);
     });
-
-    document.getElementById('task-inp-' + phaseKey).addEventListener('keydown', e => {
-      if (e.key === 'Enter') addTask(phaseKey);
-    });
+    document.getElementById('ti-'+pk).addEventListener('keydown',e=>{if(e.key==='Enter')addT(pk);});
   });
-
-  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
-  document.getElementById('ac-done').textContent = done;
-  document.getElementById('ac-pend').textContent = total - done;
-  document.getElementById('ac-pct').textContent = pct + '%';
-  document.getElementById('ac-prog-bar').style.width = pct + '%';
-  document.getElementById('ac-prog-label').textContent = done + ' / ' + total;
+  const pct=total===0?0:Math.round((done/total)*100);
+  document.getElementById('ac-done').textContent=done;
+  document.getElementById('ac-pend').textContent=total-done;
+  document.getElementById('ac-pct').textContent=pct+'%';
+  document.getElementById('ac-pb').style.width=pct+'%';
+  document.getElementById('ac-pl').textContent=done+' / '+total;
 }
+function togT(pk,idx){S.tasks[pk].items[idx].done=!S.tasks[pk].items[idx].done;sv(K.tasks,S.tasks);renderTasks();}
+function addT(pk){const inp=document.getElementById('ti-'+pk);const val=inp.value.trim();if(!val)return;S.tasks[pk].items.push({t:val,done:false});sv(K.tasks,S.tasks);inp.value='';renderTasks();toast('Tarea agregada');}
+function delT(pk,idx){S.tasks[pk].items.splice(idx,1);sv(K.tasks,S.tasks);renderTasks();toast('Tarea eliminada');}
 
-function toggleTask(phaseKey, idx) {
-  state.tasks[phaseKey].items[idx].done = !state.tasks[phaseKey].items[idx].done;
-  save(KEYS.tasks, state.tasks);
-  renderTasks();
-}
+// FOUNDATIONS
+function renderF(){const f=S.found;['nicho','problemas','deseos','situacion','ingresos','objeciones','angulos-venta','oferta-corta','promesa','mecanismo','precio','estructura'].forEach(k=>{const el=document.getElementById('f-'+k);if(el&&f[k])el.value=f[k];});}
+function saveF(){['nicho','problemas','deseos','situacion','ingresos','objeciones','angulos-venta','oferta-corta','promesa','mecanismo','precio','estructura'].forEach(k=>{const el=document.getElementById('f-'+k);if(el)S.found[k]=el.value;});sv(K.found,S.found);toast('Fundaciones guardadas');}
 
-function addTask(phaseKey) {
-  const inp = document.getElementById('task-inp-' + phaseKey);
-  const pri = document.getElementById('task-pri-' + phaseKey);
-  const val = inp.value.trim();
-  if (!val) return;
-  state.tasks[phaseKey].items.push({ t: val, p: pri.value, done: false });
-  save(KEYS.tasks, state.tasks);
-  inp.value = '';
-  renderTasks();
-  toast('Tarea agregada');
-}
-
-// ═══════════════ FOUNDATIONS ═══════════════
-function renderFoundations() {
-  const f = state.foundations;
-  ['ocupacion','problemas','deseos','objeciones','angulos','promesa','mecanismo','nicho','precio','garantia'].forEach(k => {
-    const el = document.getElementById('av-' + k);
-    if (el && f[k]) el.value = f[k];
+// CONTENIDO
+const statC={'Idea':'bgy','Guión listo':'bb','Grabando':'bg','Editando':'bg','Subido':'bgr','Listo':'bgr'};
+function openCM(){document.getElementById('mc-fecha').value=new Date().toISOString().split('T')[0];openM('m-content');}
+function saveCont(){const it={fecha:document.getElementById('mc-fecha').value,angulo:document.getElementById('mc-angulo').value.trim(),formato:document.getElementById('mc-formato').value.trim(),tipo:document.getElementById('mc-tipo').value,hook:document.getElementById('mc-hook').value.trim(),guion:document.getElementById('mc-guion').value.trim(),cta:document.getElementById('mc-cta').value.trim(),estado:document.getElementById('mc-estado').value};if(!it.angulo)return;S.content.push(it);sv(K.content,S.content);closeM('m-content');['mc-angulo','mc-formato','mc-hook','mc-guion','mc-cta'].forEach(id=>document.getElementById(id).value='');renderCal();toast('Pieza agregada');}
+function openHM(){document.getElementById('mh-fecha').value=new Date().toISOString().split('T')[0];openM('m-hist');}
+function saveHist(){const it={fecha:document.getElementById('mh-fecha').value,angulo:document.getElementById('mh-angulo').value.trim(),tipo:document.getElementById('mh-tipo').value,formato:document.getElementById('mh-formato').value.trim(),hook:document.getElementById('mh-hook').value.trim(),guion:document.getElementById('mh-guion').value.trim(),cta:document.getElementById('mh-cta').value.trim(),estado:document.getElementById('mh-estado').value};if(!it.angulo)return;S.hists.push(it);sv(K.hists,S.hists);closeM('m-hist');['mh-angulo','mh-formato','mh-hook','mh-guion','mh-cta'].forEach(id=>document.getElementById(id).value='');renderCal();toast('Historia agregada');}
+function setCF(f,el){cf=f;document.querySelectorAll('#cal-filter .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderCal();}
+function setCT(f,el){ct=f;document.querySelectorAll('#cal-time .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderCal();}
+function filterByTime(arr){
+  if(ct==='todo')return arr;
+  const now=new Date();
+  return arr.filter(it=>{
+    if(!it.fecha)return true;
+    const d=new Date(it.fecha);
+    if(ct==='dia')return d.toDateString()===now.toDateString();
+    if(ct==='semana'){const ws=new Date(now);ws.setDate(now.getDate()-now.getDay());const we=new Date(ws);we.setDate(ws.getDate()+6);return d>=ws&&d<=we;}
+    if(ct==='mes')return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+    return true;
   });
 }
+function renderCal(){
+  let posts=S.content;
+  if(cf!=='todos')posts=posts.filter(c=>c.tipo===cf);
+  posts=filterByTime(posts).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  document.getElementById('cal-post-body').innerHTML=posts.length===0?'<tr><td colspan="9" style="color:var(--t3);text-align:center;padding:18px 0">Sin piezas.</td></tr>':posts.map((c,i)=>`<tr><td style="font-size:11px;color:var(--t2)">${c.fecha||'—'}</td><td style="font-weight:600">${c.angulo||'—'}</td><td style="font-size:11px">${c.formato||'—'}</td><td><span class="badge bg">${c.tipo}</span></td><td style="font-size:11px;color:var(--t2)">${c.hook||'—'}</td><td style="font-size:11px;color:var(--t2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.guion||'—'}</td><td style="font-size:11px">${c.cta||'—'}</td><td><span class="badge ${statC[c.estado]||'bgy'}">${c.estado}</span></td><td><button class="btn btnd" onclick="delItem('content',${S.content.indexOf(c)})" style="font-size:9px;padding:2px 6px">×</button></td></tr>`).join('');
+  let hists=filterByTime(S.hists).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  document.getElementById('cal-hist-body').innerHTML=hists.length===0?'<tr><td colspan="9" style="color:var(--t3);text-align:center;padding:18px 0">Sin historias.</td></tr>':hists.map((h,i)=>`<tr><td style="font-size:11px;color:var(--t2)">${h.fecha||'—'}</td><td style="font-weight:600">${h.angulo||'—'}</td><td><span class="badge ba">${h.tipo}</span></td><td style="font-size:11px">${h.formato||'—'}</td><td style="font-size:11px;color:var(--t2)">${h.hook||'—'}</td><td style="font-size:11px;color:var(--t2)">${h.guion||'—'}</td><td style="font-size:11px">${h.cta||'—'}</td><td><span class="badge ${statC[h.estado]||'bgy'}">${h.estado}</span></td><td><button class="btn btnd" onclick="delItem('hists',${i})" style="font-size:9px;padding:2px 6px">×</button></td></tr>`).join('');
+}
 
-function saveFoundations() {
-  ['ocupacion','problemas','deseos','objeciones','angulos','promesa','mecanismo','nicho','precio','garantia'].forEach(k => {
-    const el = document.getElementById('av-' + k);
-    if (el) state.foundations[k] = el.value;
+// REFERENTES
+function openCompM(){openM('m-comp');}
+function saveComp(){const it={nombre:document.getElementById('co-nombre').value.trim(),ig:document.getElementById('co-ig').value.trim(),segs:document.getElementById('co-segs').value,nicho:document.getElementById('co-nicho').value.trim(),recolectar:document.getElementById('co-recolectar').value.trim(),eng:document.getElementById('co-eng').value,lastpost:document.getElementById('co-lastpost').value};if(!it.nombre)return;S.comps.push(it);sv(K.comps,S.comps);closeM('m-comp');['co-nombre','co-ig','co-segs','co-nicho','co-recolectar','co-eng','co-lastpost'].forEach(id=>document.getElementById(id).value='');renderComps();toast('Referente agregado');}
+function renderComps(){
+  const list=document.getElementById('comp-list');
+  if(S.comps.length===0){list.innerHTML='<div style="color:var(--t3);text-align:center;padding:28px 0">Sin referentes.</div>';return;}
+  const cols=['background:rgba(68,119,187,0.15);color:#4477bb','background:rgba(212,175,55,0.15);color:#d4af37','background:rgba(204,85,85,0.15);color:#cc5555','background:rgba(136,85,204,0.15);color:#8855cc'];
+  list.innerHTML=S.comps.map((c,i)=>`<div class="ci"><div class="cav" style="${cols[i%4]}">${c.nombre.slice(0,2).toUpperCase()}</div><div style="flex:1"><div style="font-weight:700;font-size:13px">${c.nombre}</div><div style="font-size:11px;color:var(--t3)">${c.nicho}${c.segs?' · '+Number(c.segs).toLocaleString()+' seg':''}</div>${c.recolectar?`<div style="font-size:11px;color:var(--t2);margin-top:3px">${c.recolectar.slice(0,80)}${c.recolectar.length>80?'...':''}</div>`:''}</div>${c.ig?`<a href="https://${c.ig.replace('https://','')}" target="_blank" class="btn" style="font-size:9px">Ver perfil</a>`:''}<button class="btn btnd" onclick="delItem('comps',${i})" style="font-size:9px;padding:2px 6px">×</button></div>`).join('');
+}
+
+// METRICAS
+function openMetM(){document.getElementById('mm-fecha').value=new Date().toISOString().split('T')[0];openM('m-met');}
+function saveMet(){const it={fecha:document.getElementById('mm-fecha').value,tipo:document.getElementById('mm-tipo').value,angulo:document.getElementById('mm-angulo').value.trim(),cta:document.getElementById('mm-cta').value.trim(),comments:Number(document.getElementById('mm-comments').value)||0,segs:Number(document.getElementById('mm-segs').value)||0,leads:Number(document.getElementById('mm-leads').value)||0,ventas:document.getElementById('mm-ventas').value.trim(),primer:document.getElementById('mm-primer').value.trim(),ultimo:document.getElementById('mm-ultimo').value.trim()};if(!it.angulo)return;S.mets.push(it);sv(K.mets,S.mets);closeM('m-met');['mm-angulo','mm-cta','mm-comments','mm-segs','mm-leads','mm-ventas','mm-primer','mm-ultimo'].forEach(id=>document.getElementById(id).value='');renderMets();toast('Métrica cargada');}
+function renderMets(){
+  const topAngulo=S.mets.length>0?S.mets.reduce((a,b)=>b.ventas.length>a.ventas.length?b:a).angulo:'—';
+  const totSegs=S.mets.reduce((s,m)=>s+m.segs,0);
+  const totLeads=S.mets.reduce((s,m)=>s+m.leads,0);
+  const totVentas=S.mets.filter(m=>m.ventas).length;
+  document.getElementById('met-top').textContent=topAngulo.length>18?topAngulo.slice(0,18)+'...':topAngulo;
+  document.getElementById('met-seg').textContent=totSegs;
+  document.getElementById('met-leads').textContent=totLeads;
+  document.getElementById('met-ventas').textContent=totVentas;
+  document.getElementById('met-table').innerHTML=S.mets.length===0?'<tr><td colspan="7" style="color:var(--t3);text-align:center;padding:18px 0">Sin métricas</td></tr>':S.mets.map((m,i)=>`<tr><td style="font-size:11px;color:var(--t2)">${m.fecha||'—'}</td><td style="font-weight:600">${m.angulo}</td><td><span class="badge bg">${m.tipo}</span></td><td>${m.leads}</td><td>${m.comments}</td><td style="font-size:11px">${m.ventas||'—'}</td><td><button class="btn btnd" onclick="delItem('mets',${i})" style="font-size:9px;padding:2px 6px">×</button></td></tr>`).join('');
+}
+
+// LEADS
+function openLeadM(){openM('m-lead');}
+function saveLead(){const it={nombre:document.getElementById('ll-nombre').value.trim(),origen:document.getElementById('ll-origen').value,estado:document.getElementById('ll-estado').value,accion:document.getElementById('ll-accion').value.trim(),notas:document.getElementById('ll-notas').value.trim(),fecha:new Date().toLocaleDateString('es-AR')};if(!it.nombre)return;S.leads.push(it);sv(K.leads,S.leads);closeM('m-lead');['ll-nombre','ll-accion','ll-notas'].forEach(id=>document.getElementById(id).value='');renderLeads();toast('Lead agregado');}
+function renderLeads(){
+  const sc={Nuevo:'bgy',Contactado:'bb',Agendado:'bg',Seguimiento:'ba',Cerrado:'bgr',Perdido:'br'};
+  document.getElementById('leads-table').innerHTML=S.leads.length===0?'<tr><td colspan="6" style="color:var(--t3);text-align:center;padding:18px 0">Sin leads.</td></tr>':S.leads.map((l,i)=>`<tr><td style="font-weight:700">${l.nombre}</td><td style="color:var(--t2)">${l.origen}</td><td><span class="badge ${sc[l.estado]||'bgy'}">${l.estado}</span></td><td style="font-size:11px;color:var(--t2)">${l.accion||'—'}</td><td style="font-size:11px;color:var(--t2);max-width:140px">${l.notas||'—'}</td><td><button class="btn btnd" onclick="delItem('leads',${i})" style="font-size:9px;padding:2px 6px">×</button></td></tr>`).join('');
+}
+
+// CLIENTES
+function openCliM(){document.getElementById('cl-inicio').value=new Date().toISOString().split('T')[0];openM('m-cli');}
+function saveCli(){const it={nombre:document.getElementById('cl-nombre').value.trim(),inicio:document.getElementById('cl-inicio').value,fin:document.getElementById('cl-fin').value,pp:document.getElementById('cl-pp').value,modal:document.getElementById('cl-modal').value,proxpago:document.getElementById('cl-proxpago').value,estado:document.getElementById('cl-estado').value,proxpaso:document.getElementById('cl-proxpaso').value.trim(),roadmap:document.getElementById('cl-roadmap').value.trim(),fecha:new Date().toLocaleDateString('es-AR')};if(!it.nombre)return;S.clients.push(it);sv(K.clients,S.clients);closeM('m-cli');['cl-nombre','cl-proxpaso','cl-roadmap'].forEach(id=>document.getElementById(id).value='');renderClis();toast('Cliente agregado');}
+function renderClis(){
+  const sc={'Al día':'bgr',Pendiente:'bg',Vencido:'br',Inactivo:'bgy'};
+  document.getElementById('cli-lbl').textContent=S.clients.length+' clientes en programa';
+  document.getElementById('clients-table').innerHTML=S.clients.length===0?'<tr><td colspan="8" style="color:var(--t3);text-align:center;padding:18px 0">Sin clientes.</td></tr>':S.clients.map((c,i)=>`<tr><td style="font-size:11px;color:var(--t2)">${c.fecha||'—'}</td><td style="font-weight:700">${c.nombre}</td><td style="font-size:11px;color:var(--t2)">${c.inicio||'—'}</td><td style="font-size:11px;color:var(--t2)">${c.fin||'—'}</td><td><span class="badge bg">${c.pp}</span></td><td style="font-size:11px;color:var(--t2)">${c.proxpaso||'—'}</td><td><span class="badge ${sc[c.estado]||'bgy'}">${c.estado}</span></td><td><button class="btn btnd" onclick="delItem('clients',${i})" style="font-size:9px;padding:2px 6px">×</button></td></tr>`).join('');
+}
+
+// FINANZAS
+function openIngM(){document.getElementById('ing-fecha').value=new Date().toISOString().split('T')[0];openM('m-ing');}
+function saveIng(){const it={concepto:document.getElementById('ing-concepto').value,fecha:document.getElementById('ing-fecha').value,tipo:document.getElementById('ing-tipo').value,usd:document.getElementById('ing-usd').value,ars:document.getElementById('ing-ars').value,eur:document.getElementById('ing-eur').value};S.ing.push(it);sv(K.ing,S.ing);closeM('m-ing');['ing-usd','ing-ars','ing-eur'].forEach(id=>document.getElementById(id).value='');renderFin();toast('Ingreso registrado');}
+function openGasM(){document.getElementById('gas-fecha').value=new Date().toISOString().split('T')[0];openM('m-gas');}
+function saveGas(){const it={concepto:document.getElementById('gas-concepto').value.trim(),fecha:document.getElementById('gas-fecha').value,tipo:document.getElementById('gas-tipo').value,usd:document.getElementById('gas-usd').value,ars:document.getElementById('gas-ars').value,eur:document.getElementById('gas-eur').value,cat:document.getElementById('gas-cat').value};if(!it.concepto)return;S.gas.push(it);sv(K.gas,S.gas);closeM('m-gas');['gas-concepto','gas-usd','gas-ars','gas-eur'].forEach(id=>document.getElementById(id).value='');renderFin();toast('Egreso registrado');}
+function renderFin(){
+  const ti=S.ing.reduce((s,i)=>s+Number(i.usd||0),0);
+  const tg=S.gas.reduce((s,g)=>s+Number(g.usd||0),0);
+  const pa=S.gas.filter(g=>g.tipo==='Retiro A').reduce((s,g)=>s+Number(g.usd||0),0);
+  const pb=S.gas.filter(g=>g.tipo==='Retiro B').reduce((s,g)=>s+Number(g.usd||0),0);
+  document.getElementById('fin-ing').textContent='$'+ti.toLocaleString()+' USD';
+  document.getElementById('fin-gas').textContent='$'+tg.toLocaleString()+' USD';
+  document.getElementById('fin-pa').textContent='$'+pa.toLocaleString()+' USD';
+  document.getElementById('fin-pb').textContent='$'+pb.toLocaleString()+' USD';
+  document.getElementById('ing-table').innerHTML=S.ing.length===0?'<tr><td colspan="5" style="color:var(--t3);text-align:center;padding:16px 0">Sin ingresos</td></tr>':S.ing.map((i,idx)=>`<tr><td>${i.concepto}</td><td style="font-size:11px;color:var(--t2)">${i.fecha}</td><td style="font-weight:700;color:var(--green)">${i.usd?'+$'+Number(i.usd).toLocaleString()+' USD':''}${i.ars?' / $'+Number(i.ars).toLocaleString()+' ARS':''}</td><td><span class="badge bgy">${i.tipo}</span></td><td><button class="btn btnd" onclick="delItem('ing',${idx})" style="font-size:9px;padding:2px 6px">×</button></td></tr>`).join('');
+  document.getElementById('gas-table').innerHTML=S.gas.length===0?'<tr><td colspan="5" style="color:var(--t3);text-align:center;padding:16px 0">Sin egresos</td></tr>':S.gas.map((g,idx)=>`<tr><td>${g.concepto}</td><td style="font-size:11px;color:var(--t2)">${g.fecha}</td><td style="font-weight:700;color:var(--red)">${g.usd?'-$'+Number(g.usd).toLocaleString()+' USD':''}${g.ars?' / $'+Number(g.ars).toLocaleString()+' ARS':''}</td><td><span class="badge bgy">${g.tipo}</span></td><td><button class="btn btnd" onclick="delItem('gas',${idx})" style="font-size:9px;padding:2px 6px">×</button></td></tr>`).join('');
+}
+
+// EXPORT/IMPORT
+function renderExport(){
+  document.getElementById('export-stats').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      ${[['Tareas',Object.values(S.tasks).reduce((s,p)=>s+p.items.length,0)],['Contenido',S.content.length+S.hists.length],['Referentes',S.comps.length],['Métricas',S.mets.length],['Leads',S.leads.length],['Clientes',S.clients.length],['Ingresos',S.ing.length],['Egresos',S.gas.length]].map(([n,v])=>`<div style="background:var(--s2);border-radius:var(--rs);padding:12px;border:1px solid var(--border)"><div style="font-size:9px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">${n}</div><div style="font-size:22px;font-weight:900;font-family:'Barlow Condensed',sans-serif">${v}</div></div>`).join('')}
+    </div>`;
+}
+function exportData(){
+  const data=JSON.stringify({version:'2.0',exported:new Date().toISOString(),...S},null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='exposure-crm-backup-'+new Date().toISOString().split('T')[0]+'.json';a.click();
+  URL.revokeObjectURL(url);toast('Datos exportados');
+}
+function importData(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(data.tasks)S.tasks=data.tasks;
+      if(data.found)S.found=data.found;
+      if(data.content)S.content=data.content;
+      if(data.hists)S.hists=data.hists;
+      if(data.comps)S.comps=data.comps;
+      if(data.mets)S.mets=data.mets;
+      if(data.leads)S.leads=data.leads;
+      if(data.clients)S.clients=data.clients;
+      if(data.ing)S.ing=data.ing;
+      if(data.gas)S.gas=data.gas;
+      if(data.angulos)S.angulos=data.angulos;
+      Object.entries(K).forEach(([k,key])=>{if(S[k]!==undefined)sv(key,S[k]);});
+      toast('Datos importados correctamente');
+      renderDash();
+    }catch{toast('Error al importar el archivo');}
+  };
+  reader.readAsText(file);
+}
+
+// ÁNGULOS
+let angPrimer=[],angUltimo=[];
+function openAngM(){angPrimer=[];angUltimo=[];document.getElementById('ang-primer-list').innerHTML='';document.getElementById('ang-ultimo-list').innerHTML='';document.getElementById('ang-angulo').value='';document.getElementById('ang-primer-inp').value='';document.getElementById('ang-ultimo-inp').value='';openM('m-ang');}
+function addAngContact(tipo){
+  const inp=document.getElementById('ang-'+tipo+'-inp');
+  const val=inp.value.trim();if(!val)return;
+  if(tipo==='primer')angPrimer.push(val);else angUltimo.push(val);
+  renderAngContacts();inp.value='';
+}
+function renderAngContacts(){
+  ['primer','ultimo'].forEach(t=>{
+    const list=t==='primer'?angPrimer:angUltimo;
+    document.getElementById('ang-'+t+'-list').innerHTML=list.map((n,i)=>`<span style="display:inline-flex;align-items:center;gap:4px;background:var(--goldbg);color:var(--gold);border:1px solid var(--borderg);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;margin:2px;cursor:pointer" onclick="removeAngContact('${t}',${i})">${n} ×</span>`).join('');
   });
-  save(KEYS.foundations, state.foundations);
-  toast('Fundaciones guardadas');
+}
+function removeAngContact(tipo,idx){if(tipo==='primer')angPrimer.splice(idx,1);else angUltimo.splice(idx,1);renderAngContacts();}
+document.getElementById('ang-primer-inp').addEventListener('keydown',e=>{if(e.key==='Enter')addAngContact('primer');});
+document.getElementById('ang-ultimo-inp').addEventListener('keydown',e=>{if(e.key==='Enter')addAngContact('ultimo');});
+function saveAng(){
+  const it={angulo:document.getElementById('ang-angulo').value.trim(),tipo:document.getElementById('ang-tipo').value,primer:[...angPrimer],ultimo:[...angUltimo],ad:document.getElementById('ang-ad').value,fecha:new Date().toLocaleDateString('es-AR')};
+  if(!it.angulo)return;
+  S.angulos.push(it);sv(K.angulos,S.angulos);closeM('m-ang');renderAngulos();toast('Ángulo agregado');
+}
+function renderAngulos(){
+  // Top ventas: cruzar con métricas
+  const metVentas=S.mets.filter(m=>m.ventas&&m.ventas.trim()!=='');
+  const angVentaCount={};
+  S.angulos.forEach(a=>{
+    const matches=metVentas.filter(m=>m.angulo&&a.angulo&&m.angulo.toLowerCase().includes(a.angulo.toLowerCase().slice(0,8)));
+    angVentaCount[a.angulo]=(angVentaCount[a.angulo]||0)+matches.length+a.ultimo.length;
+  });
+  const topVenta=Object.entries(angVentaCount).sort((a,b)=>b[1]-a[1])[0];
+  // Top impacto PC1/PC2: cantidad de primeros contactos
+  const angImpacto=S.angulos.map(a=>({a:a.angulo,score:a.primer.length+a.ultimo.length})).sort((a,b)=>b.score-a.score)[0];
+  document.getElementById('ang-top-venta').textContent=topVenta?topVenta[0].slice(0,30)+(topVenta[0].length>30?'...':''):'—';
+  document.getElementById('ang-top-impacto').textContent=angImpacto&&angImpacto.score>0?angImpacto.a.slice(0,30)+(angImpacto.a.length>30?'...':''):'—';
+  const typeColor={Problema:'br',Solución:'bgr',Producto:'bg',Mentalidad:'bb',Volumen:'bp',Otro:'bgy'};
+  document.getElementById('ang-table').innerHTML=S.angulos.length===0?'<tr><td colspan="7" style="color:var(--t3);text-align:center;padding:18px 0">Sin ángulos.</td></tr>':S.angulos.map((a,i)=>`<tr><td style="font-weight:700">${a.angulo}</td><td><span class="badge ${typeColor[a.tipo]||'bgy'}">${a.tipo}</span></td><td style="font-size:11px;color:var(--t2)">${a.primer.length>0?a.primer.join(', '):'—'}</td><td style="font-size:11px;color:var(--t2)">${a.ultimo.length>0?a.ultimo.join(', '):'—'}</td><td><span class="badge ${a.ad==='Sí'?'bgr':'bgy'}">${a.ad}</span></td><td style="font-size:11px;color:var(--t2)">${S.mets.filter(m=>m.angulo&&a.angulo&&m.angulo.toLowerCase().includes(a.angulo.toLowerCase().slice(0,6))).length||0} métricas</td><td><button class="btn btnd" onclick="delItem('angulos',${i})" style="font-size:9px;padding:2px 6px">×</button></td></tr>`).join('');
 }
 
-// ═══════════════ CONTENT ═══════════════
-function openContentModal() {
-  document.getElementById('mc-fecha').value = new Date().toISOString().split('T')[0];
-  openModal('modal-content');
-}
+// DELETE
+function delItem(key,idx){if(!confirm('¿Eliminar?'))return;S[key].splice(idx,1);sv(K[key],S[key]);const fn={content:renderCal,hists:renderCal,comps:renderComps,mets:renderMets,leads:renderLeads,clients:renderClis,ing:renderFin,gas:renderFin,angulos:renderAngulos};if(fn[key])fn[key]();toast('Eliminado');}
 
-function saveContent() {
-  const item = {
-    id: Date.now(),
-    titulo: document.getElementById('mc-titulo').value.trim(),
-    tipo: document.getElementById('mc-tipo').value,
-    estado: document.getElementById('mc-estado').value,
-    hook: document.getElementById('mc-hook').value.trim(),
-    angulo: document.getElementById('mc-angulo').value.trim(),
-    fecha: document.getElementById('mc-fecha').value,
-    guion: document.getElementById('mc-guion').value.trim(),
-  };
-  if (!item.titulo) return;
-  state.content.push(item);
-  save(KEYS.content, state.content);
-  closeModal('modal-content');
-  document.getElementById('mc-titulo').value = '';
-  document.getElementById('mc-hook').value = '';
-  document.getElementById('mc-angulo').value = '';
-  document.getElementById('mc-guion').value = '';
-  renderContent();
-  toast('Pieza agregada');
-}
-
-function setCalFilter(f, el) {
-  calFilter = f;
-  document.querySelectorAll('#cal-filter .ftab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderContent();
-}
-
-function renderContent() {
-  const filtered = calFilter === 'todos' ? state.content : state.content.filter(c => c.tipo === calFilter);
-  const stateColors = { 'Idea':'b-gray','Guión listo':'b-blue','Grabando':'b-amber','Editando':'b-amber','Subido':'b-green' };
-  const body = document.getElementById('content-table-body');
-  if (filtered.length === 0) {
-    body.innerHTML = '<tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin piezas. Agregá una con el botón.</td></tr>';
-    return;
-  }
-  body.innerHTML = filtered.sort((a,b) => new Date(a.fecha) - new Date(b.fecha)).map((c,i) => `
-    <tr>
-      <td style="font-weight:500">${c.titulo}</td>
-      <td><span class="badge b-blue">${c.tipo}</span></td>
-      <td style="color:var(--text2);font-size:12px;max-width:200px">${c.hook || '—'}</td>
-      <td><span class="badge ${stateColors[c.estado]||'b-gray'}">${c.estado}</span></td>
-      <td style="font-family:'DM Mono',monospace;font-size:11px">${c.fecha || '—'}</td>
-      <td><button class="btn" onclick="deleteItem('content',${i})" style="font-size:10px;padding:3px 8px;color:var(--red)">×</button></td>
-    </tr>`).join('');
-}
-
-// ═══════════════ COMPETITORS ═══════════════
-function openCompModal() { openModal('modal-comp'); }
-
-function saveComp() {
-  const item = {
-    nombre: document.getElementById('comp-nombre').value.trim(),
-    ig: document.getElementById('comp-ig').value.trim(),
-    segs: document.getElementById('comp-segs').value,
-    nicho: document.getElementById('comp-nicho').value.trim(),
-    oferta: document.getElementById('comp-oferta').value.trim(),
-    fuertes: document.getElementById('comp-fuertes').value.trim(),
-    gaps: document.getElementById('comp-gaps').value.trim(),
-  };
-  if (!item.nombre) return;
-  state.competitors.push(item);
-  save(KEYS.competitors, state.competitors);
-  closeModal('modal-comp');
-  ['comp-nombre','comp-ig','comp-segs','comp-nicho','comp-oferta','comp-fuertes','comp-gaps'].forEach(id => { document.getElementById(id).value = ''; });
-  renderCompetitors();
-  toast('Competidor agregado');
-}
-
-function renderCompetitors() {
-  const list = document.getElementById('comp-list');
-  if (state.competitors.length === 0) {
-    list.innerHTML = '<div style="color:var(--text3);text-align:center;padding:30px 0;font-size:13px">Sin competidores. Agregá uno con el botón.</div>';
-    return;
-  }
-  const colors = ['background:var(--blue-bg);color:var(--blue-text)','background:var(--accent-bg);color:var(--accent-text)','background:var(--amber-bg);color:var(--amber-text)','background:var(--purple-bg);color:var(--purple-text)'];
-  list.innerHTML = state.competitors.map((c,i) => `
-    <div class="comp-item">
-      <div class="comp-avatar" style="${colors[i%colors.length]}">${c.nombre.slice(0,2).toUpperCase()}</div>
-      <div style="flex:1">
-        <div style="font-weight:500;font-size:13px">${c.nombre}</div>
-        <div style="font-size:11px;color:var(--text3)">${c.nicho} · ${c.segs ? Number(c.segs).toLocaleString() + ' seguidores' : ''}</div>
-        ${c.oferta ? `<div style="font-size:11px;color:var(--text2);margin-top:3px">${c.oferta}</div>` : ''}
-      </div>
-      ${c.ig ? `<a href="https://${c.ig}" target="_blank" class="btn" style="font-size:11px">Ver perfil</a>` : ''}
-      <button class="btn" onclick="deleteItem('competitors',${i})" style="font-size:10px;color:var(--red)">×</button>
-    </div>`).join('');
-}
-
-// ═══════════════ METRICS ═══════════════
-function openMetricModal() { openModal('modal-metric'); }
-
-function saveMetric() {
-  const alcance = Number(document.getElementById('met-alcance').value) || 0;
-  const likes = Number(document.getElementById('met-likes').value) || 0;
-  const comments = Number(document.getElementById('met-comments').value) || 0;
-  const eng = alcance > 0 ? ((likes + comments) / alcance * 100).toFixed(1) : 0;
-  const score = eng >= 5 ? '★★★★★' : eng >= 3.5 ? '★★★★' : eng >= 2 ? '★★★' : '★★';
-  const item = {
-    titulo: document.getElementById('met-titulo').value.trim(),
-    tipo: document.getElementById('met-tipo').value,
-    alcance,
-    likes,
-    comments,
-    leads: Number(document.getElementById('met-leads-inp').value) || 0,
-    eng,
-    score,
-  };
-  if (!item.titulo) return;
-  state.metrics.push(item);
-  save(KEYS.metrics, state.metrics);
-  closeModal('modal-metric');
-  ['met-titulo','met-alcance','met-likes','met-comments','met-leads-inp'].forEach(id => { document.getElementById(id).value = ''; });
-  renderMetrics();
-  toast('Métrica cargada');
-}
-
-function renderMetrics() {
-  if (state.metrics.length === 0) {
-    document.getElementById('met-table').innerHTML = '<tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin métricas cargadas aún</td></tr>';
-    document.getElementById('met-top').textContent = '—';
-    document.getElementById('met-eng').textContent = '0%';
-    document.getElementById('met-leads').textContent = '0';
-    return;
-  }
-  const sorted = [...state.metrics].sort((a,b) => b.alcance - a.alcance);
-  document.getElementById('met-top').textContent = sorted[0].titulo.length > 18 ? sorted[0].titulo.slice(0,18)+'...' : sorted[0].titulo;
-  const avgEng = (state.metrics.reduce((s,m) => s + Number(m.eng), 0) / state.metrics.length).toFixed(1);
-  document.getElementById('met-eng').textContent = avgEng + '%';
-  document.getElementById('met-leads').textContent = state.metrics.reduce((s,m) => s + m.leads, 0);
-  const scoreColor = s => s === '★★★★★' ? 'b-green' : s === '★★★★' ? 'b-blue' : s === '★★★' ? 'b-amber' : 'b-red';
-  document.getElementById('met-table').innerHTML = sorted.map((m,i) => `
-    <tr>
-      <td style="font-weight:500">${m.titulo}</td>
-      <td><span class="badge b-blue">${m.tipo}</span></td>
-      <td style="font-family:'DM Mono',monospace">${m.alcance.toLocaleString()}</td>
-      <td style="font-family:'DM Mono',monospace">${m.likes.toLocaleString()}</td>
-      <td style="font-family:'DM Mono',monospace">${m.leads}</td>
-      <td><span class="badge ${scoreColor(m.score)}">${m.score}</span></td>
-    </tr>`).join('');
-}
-
-// ═══════════════ LEADS ═══════════════
-function openLeadModal() { openModal('modal-lead'); }
-
-function saveLead() {
-  const item = {
-    nombre: document.getElementById('lead-nombre').value.trim(),
-    origen: document.getElementById('lead-origen').value,
-    estado: document.getElementById('lead-estado').value,
-    accion: document.getElementById('lead-accion').value.trim(),
-    notas: document.getElementById('lead-notas').value.trim(),
-    fecha: new Date().toLocaleDateString('es-AR'),
-  };
-  if (!item.nombre) return;
-  state.leads.push(item);
-  save(KEYS.leads, state.leads);
-  closeModal('modal-lead');
-  ['lead-nombre','lead-accion','lead-notas'].forEach(id => { document.getElementById(id).value = ''; });
-  renderLeads();
-  toast('Lead agregado');
-}
-
-function renderLeads() {
-  const stateColor = { 'Nuevo':'b-gray','Contactado':'b-blue','Llamada agendada':'b-amber','Propuesta enviada':'b-blue','Cerrado':'b-green','Perdido':'b-red' };
-  const body = document.getElementById('leads-table');
-  if (state.leads.length === 0) {
-    body.innerHTML = '<tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin leads. Agregá uno con el botón.</td></tr>';
-    return;
-  }
-  body.innerHTML = state.leads.map((l,i) => `
-    <tr>
-      <td style="font-weight:500">${l.nombre}</td>
-      <td style="color:var(--text2)">${l.origen}</td>
-      <td><span class="badge ${stateColor[l.estado]||'b-gray'}">${l.estado}</span></td>
-      <td style="color:var(--text2);font-size:12px">${l.accion || '—'}</td>
-      <td><button class="btn" onclick="deleteItem('leads',${i})" style="font-size:10px;color:var(--red)">×</button></td>
-    </tr>`).join('');
-}
-
-// ═══════════════ CLIENTS ═══════════════
-function openClientModal() {
-  document.getElementById('cli-inicio').value = new Date().toISOString().split('T')[0];
-  openModal('modal-client');
-}
-
-function saveClient() {
-  const item = {
-    nombre: document.getElementById('cli-nombre').value.trim(),
-    inicio: document.getElementById('cli-inicio').value,
-    cuota: document.getElementById('cli-cuota').value,
-    proxpago: document.getElementById('cli-proxpago').value,
-    estado: document.getElementById('cli-estado').value,
-  };
-  if (!item.nombre) return;
-  state.clients.push(item);
-  save(KEYS.clients, state.clients);
-  closeModal('modal-client');
-  ['cli-nombre','cli-cuota'].forEach(id => { document.getElementById(id).value = ''; });
-  renderClients();
-  toast('Cliente agregado');
-}
-
-function renderClients() {
-  const stateColor = { 'Al día':'b-green','Pendiente':'b-amber','Vencido':'b-red','Inactivo':'b-gray' };
-  document.getElementById('cli-count-label').textContent = state.clients.length + ' clientes en programa';
-  const body = document.getElementById('clients-table');
-  if (state.clients.length === 0) {
-    body.innerHTML = '<tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px 0">Sin clientes aún</td></tr>';
-    return;
-  }
-  body.innerHTML = state.clients.map((c,i) => `
-    <tr>
-      <td style="font-weight:500">${c.nombre}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text2)">${c.inicio || '—'}</td>
-      <td style="font-family:'DM Mono',monospace">$${Number(c.cuota||0).toLocaleString()} USD</td>
-      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text2)">${c.proxpago || '—'}</td>
-      <td><span class="badge ${stateColor[c.estado]||'b-gray'}">${c.estado}</span></td>
-      <td><button class="btn" onclick="deleteItem('clients',${i})" style="font-size:10px;color:var(--red)">×</button></td>
-    </tr>`).join('');
-}
-
-// ═══════════════ FINANZAS ═══════════════
-function openIngModal() {
-  document.getElementById('ing-fecha').value = new Date().toISOString().split('T')[0];
-  openModal('modal-ing');
-}
-function openGasModal() {
-  document.getElementById('gas-fecha').value = new Date().toISOString().split('T')[0];
-  openModal('modal-gas');
-}
-
-function saveIngreso() {
-  const item = {
-    concepto: document.getElementById('ing-concepto').value.trim(),
-    monto: document.getElementById('ing-monto').value,
-    fecha: document.getElementById('ing-fecha').value,
-    cliente: document.getElementById('ing-cliente').value.trim(),
-  };
-  if (!item.concepto || !item.monto) return;
-  state.ingresos.push(item);
-  save(KEYS.ingresos, state.ingresos);
-  closeModal('modal-ing');
-  ['ing-concepto','ing-monto','ing-cliente'].forEach(id => { document.getElementById(id).value = ''; });
-  renderFinanzas();
-  toast('Ingreso registrado');
-}
-
-function saveGasto() {
-  const item = {
-    concepto: document.getElementById('gas-concepto').value.trim(),
-    monto: document.getElementById('gas-monto').value,
-    fecha: document.getElementById('gas-fecha').value,
-    cat: document.getElementById('gas-cat').value,
-  };
-  if (!item.concepto || !item.monto) return;
-  state.gastos.push(item);
-  save(KEYS.gastos, state.gastos);
-  closeModal('modal-gas');
-  ['gas-concepto','gas-monto'].forEach(id => { document.getElementById(id).value = ''; });
-  renderFinanzas();
-  toast('Gasto registrado');
-}
-
-function renderFinanzas() {
-  const ib = document.getElementById('ing-table');
-  ib.innerHTML = state.ingresos.length === 0
-    ? '<tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin ingresos</td></tr>'
-    : state.ingresos.map((i,idx) => `<tr><td>${i.concepto}</td><td style="color:var(--text2)">${i.cliente||'—'}</td><td style="font-family:'DM Mono',monospace;color:var(--accent)">+$${Number(i.monto).toLocaleString()}</td><td style="font-size:11px;color:var(--text3)">${i.fecha}</td><td><button class="btn" onclick="deleteItem('ingresos',${idx})" style="font-size:10px;color:var(--red)">×</button></td></tr>`).join('');
-
-  const gb = document.getElementById('gas-table');
-  gb.innerHTML = state.gastos.length === 0
-    ? '<tr><td colspan="5" style="color:var(--text3);text-align:center;padding:20px 0">Sin gastos</td></tr>'
-    : state.gastos.map((g,idx) => `<tr><td>${g.concepto}</td><td><span class="badge b-gray">${g.cat}</span></td><td style="font-family:'DM Mono',monospace;color:var(--red)">-$${Number(g.monto).toLocaleString()}</td><td style="font-size:11px;color:var(--text3)">${g.fecha}</td><td><button class="btn" onclick="deleteItem('gastos',${idx})" style="font-size:10px;color:var(--red)">×</button></td></tr>`).join('');
-}
-
-// ═══════════════ DELETE ═══════════════
-function deleteItem(key, idx) {
-  if (!confirm('¿Eliminar este elemento?')) return;
-  state[key].splice(idx, 1);
-  save(KEYS[key], state[key]);
-  if (key === 'content') renderContent();
-  if (key === 'competitors') renderCompetitors();
-  if (key === 'metrics') renderMetrics();
-  if (key === 'leads') renderLeads();
-  if (key === 'clients') renderClients();
-  if (key === 'ingresos' || key === 'gastos') renderFinanzas();
-  toast('Eliminado');
-}
-
-// ═══════════════ INIT ═══════════════
-renderDashboard();
+renderDash();
 </script>
 </body>
 </html>
