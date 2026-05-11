@@ -58,7 +58,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
 
 /* MAIN */
 .main{flex:1;overflow-y:auto;padding:28px 32px;background:transparent;position:relative;transition:all 0.25s}
-.main::after{content:'';position:fixed;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");opacity:0.018;z-index:0}
+.main::after{content:'';position:fixed;inset:0;pointer-events:none !important;background:url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");opacity:0.018;z-index:0}
 .page{display:none}.page.active{display:block}
 .ph{margin-bottom:24px}
 .ptitle{font-size:26px;font-weight:900;letter-spacing:-0.01em;color:var(--text);text-transform:uppercase;font-family:'Barlow Condensed',sans-serif}
@@ -166,8 +166,8 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
 .chwrap{position:relative;height:190px}
 
 /* MODAL */
-.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;align-items:center;justify-content:center}
-.mbg.open{display:flex}
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:500;align-items:center;justify-content:center}
+.mbg.open{display:flex;z-index:500}
 .modal{background:linear-gradient(160deg,rgba(22,20,18,0.99) 0%,rgba(12,11,10,1) 100%);border:1px solid var(--borderg);border-radius:calc(var(--r) + 4px);padding:26px;width:520px;max-width:96vw;max-height:90vh;overflow-y:auto;box-shadow:0 0 0 1px rgba(212,175,55,0.08),0 20px 60px rgba(0,0,0,0.7),0 8px 24px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.04)}
 .mtitle{font-size:20px;font-weight:900;margin-bottom:18px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:0.02em;color:var(--gold)}
 .mact{display:flex;gap:7px;justify-content:flex-end;margin-top:18px}
@@ -177,7 +177,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
 .mg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 
 /* TOAST */
-.toast{position:fixed;bottom:22px;right:22px;background:var(--goldbg);color:var(--gold);border:1px solid var(--borderg);padding:9px 16px;border-radius:var(--rs);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;opacity:0;transform:translateY(8px);transition:all 0.2s;z-index:200;pointer-events:none}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--goldbg);color:var(--gold);border:1px solid var(--borderg);padding:9px 16px;border-radius:var(--rs);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;opacity:0;transform:translateY(8px);transition:all 0.2s;z-index:600;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
 
 /* API BADGE */
@@ -295,7 +295,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
       <div class="chwrap"><canvas id="chart-dash" role="img" aria-label="Ingresos y gastos">Comparativa.</canvas></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Últimos movimientos</div><button class="btn" onclick="nav('finanzas',document.querySelector('[onclick*=finanzas]'))">Ver todos</button></div>
+      <div class="ch"><div class="ct">Últimos movimientos</div><button class="btn" onclick="nav('finanzas',this)">Ver todos</button></div>
       <table class="tbl"><thead><tr><th>Concepto</th><th>Tipo</th><th>Monto</th></tr></thead><tbody id="dash-movs"></tbody></table>
     </div>
   </div>
@@ -499,7 +499,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
 <!-- ══════════════ MODALS ══════════════ -->
 
 <!-- CONTENIDO POST -->
-<div class="mbg" id="m-content">
+<div class="mbg" id="modal-content">
   <div class="modal">
     <div class="mtitle">Nueva pieza de contenido</div>
     <div class="mg2">
@@ -514,12 +514,12 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
     <div class="mfield"><label class="mlbl">Hook</label><input class="inpf" id="mc-hook" placeholder="Primera frase gancho..."></div>
     <div class="mfield"><label class="mlbl">Guión</label><textarea class="ainp" id="mc-guion" placeholder="El guión completo..." style="min-height:80px"></textarea></div>
     <div class="mfield"><label class="mlbl">Estado</label><select class="selvf" id="mc-estado"><option>Idea</option><option>Guión listo</option><option>Grabando</option><option>Editando</option><option>Subido</option></select></div>
-    <div class="mact"><button class="btn" onclick="closeM('m-content')">Cancelar</button><button class="btnp btn" onclick="saveCont()">Guardar</button></div>
+    <div class="mact"><button class="btn" onclick="closeM('modal-content')">Cancelar</button><button class="btnp btn" onclick="saveCont()">Guardar</button></div>
   </div>
 </div>
 
 <!-- HISTORIA -->
-<div class="mbg" id="m-hist">
+<div class="mbg" id="modal-hist">
   <div class="modal">
     <div class="mtitle">Nueva historia</div>
     <div class="mg2">
@@ -534,12 +534,12 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
     <div class="mfield"><label class="mlbl">Hook</label><input class="inpf" id="mh-hook" placeholder="Primer frame / texto..."></div>
     <div class="mfield"><label class="mlbl">Guión</label><textarea class="ainp" id="mh-guion" placeholder="Copy de la historia..." style="min-height:60px"></textarea></div>
     <div class="mfield"><label class="mlbl">Estado</label><select class="selvf" id="mh-estado"><option>Idea</option><option>Listo</option><option>Subido</option></select></div>
-    <div class="mact"><button class="btn" onclick="closeM('m-hist')">Cancelar</button><button class="btnp btn" onclick="saveHist()">Guardar</button></div>
+    <div class="mact"><button class="btn" onclick="closeM('modal-hist')">Cancelar</button><button class="btnp btn" onclick="saveHist()">Guardar</button></div>
   </div>
 </div>
 
 <!-- REFERENTE -->
-<div class="mbg" id="m-comp">
+<div class="mbg" id="modal-comp">
   <div class="modal">
     <div class="mtitle">Agregar referente</div>
     <div class="mg2">
@@ -561,12 +561,12 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
         <div><label class="mlbl">Último post</label><input class="inpf" id="co-lastpost" placeholder="Futuro: scraping auto" style="opacity:0.6"></div>
       </div>
     </div>
-    <div class="mact"><button class="btn" onclick="closeM('m-comp')">Cancelar</button><button class="btnp btn" onclick="saveComp()">Guardar</button></div>
+    <div class="mact"><button class="btn" onclick="closeM('modal-comp')">Cancelar</button><button class="btnp btn" onclick="saveComp()">Guardar</button></div>
   </div>
 </div>
 
 <!-- MÉTRICA -->
-<div class="mbg" id="m-met">
+<div class="mbg" id="modal-met">
   <div class="modal">
     <div class="mtitle">Cargar métrica</div>
     <div class="mg2">
@@ -585,12 +585,12 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
       <div class="mfield"><label class="mlbl">Primer contacto de</label><input class="inpf" id="mm-primer" placeholder="Nombre del lead..."></div>
       <div class="mfield"><label class="mlbl">Último contacto de</label><input class="inpf" id="mm-ultimo" placeholder="Nombre del lead..."></div>
     </div>
-    <div class="mact"><button class="btn" onclick="closeM('m-met')">Cancelar</button><button class="btnp btn" onclick="saveMet()">Guardar</button></div>
+    <div class="mact"><button class="btn" onclick="closeM('modal-met')">Cancelar</button><button class="btnp btn" onclick="saveMet()">Guardar</button></div>
   </div>
 </div>
 
 <!-- LEAD -->
-<div class="mbg" id="m-lead">
+<div class="mbg" id="modal-lead">
   <div class="modal">
     <div class="mtitle">Nuevo lead</div>
     <div class="mfield"><label class="mlbl">Nombre y apellido</label><input class="inpf" id="ll-nombre" placeholder="Nombre completo..."></div>
@@ -600,12 +600,12 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
     </div>
     <div class="mfield"><label class="mlbl">Última acción</label><input class="inpf" id="ll-accion" placeholder="Qué hiciste con este lead..."></div>
     <div class="mfield"><label class="mlbl">Notas</label><textarea class="ainp" id="ll-notas" placeholder="Info adicional..." style="min-height:60px"></textarea></div>
-    <div class="mact"><button class="btn" onclick="closeM('m-lead')">Cancelar</button><button class="btnp btn" onclick="saveLead()">Guardar</button></div>
+    <div class="mact"><button class="btn" onclick="closeM('modal-lead')">Cancelar</button><button class="btnp btn" onclick="saveLead()">Guardar</button></div>
   </div>
 </div>
 
 <!-- CLIENTE -->
-<div class="mbg" id="m-cli">
+<div class="mbg" id="modal-cli">
   <div class="modal">
     <div class="mtitle">Nuevo cliente</div>
     <div class="mfield"><label class="mlbl">Nombre y apellido</label><input class="inpf" id="cl-nombre" placeholder="Nombre completo..."></div>
@@ -623,12 +623,12 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
     </div>
     <div class="mfield"><label class="mlbl">Próximo paso</label><input class="inpf" id="cl-proxpaso" placeholder="Qué sigue con este cliente..."></div>
     <div class="mfield"><label class="mlbl">Roadmap (link)</label><input class="inpf" id="cl-roadmap" placeholder="Link al Miro o Notion del cliente..."></div>
-    <div class="mact"><button class="btn" onclick="closeM('m-cli')">Cancelar</button><button class="btnp btn" onclick="saveCli()">Guardar</button></div>
+    <div class="mact"><button class="btn" onclick="closeM('modal-cli')">Cancelar</button><button class="btnp btn" onclick="saveCli()">Guardar</button></div>
   </div>
 </div>
 
 <!-- INGRESO -->
-<div class="mbg" id="m-ing">
+<div class="mbg" id="modal-ing">
   <div class="modal">
     <div class="mtitle">Nuevo ingreso</div>
     <div class="mfield"><label class="mlbl">Concepto</label><select class="selvf" id="ing-concepto"><option>Venta Nueva</option><option>Cuota</option><option>Venta Interna</option><option>Personal</option></select></div>
@@ -641,12 +641,12 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
       <div class="mfield"><label class="mlbl">Monto ARS</label><input class="inpf" type="number" id="ing-ars" placeholder="0"></div>
       <div class="mfield"><label class="mlbl">Monto EUR</label><input class="inpf" type="number" id="ing-eur" placeholder="0"></div>
     </div>
-    <div class="mact"><button class="btn" onclick="closeM('m-ing')">Cancelar</button><button class="btnp btn" onclick="saveIng()">Guardar</button></div>
+    <div class="mact"><button class="btn" onclick="closeM('modal-ing')">Cancelar</button><button class="btnp btn" onclick="saveIng()">Guardar</button></div>
   </div>
 </div>
 
 <!-- EGRESO -->
-<div class="mbg" id="m-gas">
+<div class="mbg" id="modal-gas">
   <div class="modal">
     <div class="mtitle">Nuevo egreso</div>
     <div class="mfield"><label class="mlbl">Concepto</label><input class="inpf" id="gas-concepto" placeholder="Descripción del gasto..."></div>
@@ -660,12 +660,12 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
       <div class="mfield"><label class="mlbl">Monto EUR</label><input class="inpf" type="number" id="gas-eur" placeholder="0"></div>
     </div>
     <div class="mfield"><label class="mlbl">Categoría</label><select class="selvf" id="gas-cat"><option>Retiro</option><option>Pago</option><option>Marketing</option><option>Ventas</option><option>Producto</option><option>Operaciones</option><option>Empleados</option></select></div>
-    <div class="mact"><button class="btn" onclick="closeM('m-gas')">Cancelar</button><button class="btnp btn" onclick="saveGas()">Guardar</button></div>
+    <div class="mact"><button class="btn" onclick="closeM('modal-gas')">Cancelar</button><button class="btnp btn" onclick="saveGas()">Guardar</button></div>
   </div>
 </div>
 
 <!-- ÁNGULO MODAL -->
-<div class="mbg" id="m-ang">
+<div class="mbg" id="modal-ang">
   <div class="modal">
     <div class="mtitle">Nuevo ángulo</div>
     <div class="mfield"><label class="mlbl">Ángulo</label><input class="inpf" id="ang-angulo" placeholder="Describí el ángulo..."></div>
@@ -695,7 +695,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font
     <div class="mfield"><label class="mlbl">Para AD</label>
       <select class="selvf" id="ang-ad"><option>No</option><option>Sí</option></select>
     </div>
-    <div class="mact"><button class="btn" onclick="closeM('m-ang')">Cancelar</button><button class="btnp btn" onclick="saveAng()">Guardar</button></div>
+    <div class="mact"><button class="btn" onclick="closeM('modal-ang')">Cancelar</button><button class="btnp btn" onclick="saveAng()">Guardar</button></div>
   </div>
 </div>
 
@@ -864,10 +864,10 @@ function saveF(){['nicho','problemas','deseos','situacion','ingresos','objecione
 
 // CONTENIDO
 const statC={'Idea':'bgy','Guión listo':'bb','Grabando':'bg','Editando':'bg','Subido':'bgr','Listo':'bgr'};
-function openCM(){document.getElementById('mc-fecha').value=new Date().toISOString().split('T')[0];openM('m-content');}
-function saveCont(){const it={fecha:document.getElementById('mc-fecha').value,angulo:document.getElementById('mc-angulo').value.trim(),formato:document.getElementById('mc-formato').value.trim(),tipo:document.getElementById('mc-tipo').value,hook:document.getElementById('mc-hook').value.trim(),guion:document.getElementById('mc-guion').value.trim(),cta:document.getElementById('mc-cta').value.trim(),estado:document.getElementById('mc-estado').value};if(!it.angulo)return;S.content.push(it);sv(K.content,S.content);closeM('m-content');['mc-angulo','mc-formato','mc-hook','mc-guion','mc-cta'].forEach(id=>document.getElementById(id).value='');renderCal();toast('Pieza agregada');}
-function openHM(){document.getElementById('mh-fecha').value=new Date().toISOString().split('T')[0];openM('m-hist');}
-function saveHist(){const it={fecha:document.getElementById('mh-fecha').value,angulo:document.getElementById('mh-angulo').value.trim(),tipo:document.getElementById('mh-tipo').value,formato:document.getElementById('mh-formato').value.trim(),hook:document.getElementById('mh-hook').value.trim(),guion:document.getElementById('mh-guion').value.trim(),cta:document.getElementById('mh-cta').value.trim(),estado:document.getElementById('mh-estado').value};if(!it.angulo)return;S.hists.push(it);sv(K.hists,S.hists);closeM('m-hist');['mh-angulo','mh-formato','mh-hook','mh-guion','mh-cta'].forEach(id=>document.getElementById(id).value='');renderCal();toast('Historia agregada');}
+function openCM(){document.getElementById('mc-fecha').value=new Date().toISOString().split('T')[0];openM('modal-content');}
+function saveCont(){const it={fecha:document.getElementById('mc-fecha').value,angulo:document.getElementById('mc-angulo').value.trim(),formato:document.getElementById('mc-formato').value.trim(),tipo:document.getElementById('mc-tipo').value,hook:document.getElementById('mc-hook').value.trim(),guion:document.getElementById('mc-guion').value.trim(),cta:document.getElementById('mc-cta').value.trim(),estado:document.getElementById('mc-estado').value};if(!it.angulo)return;S.content.push(it);sv(K.content,S.content);closeM('modal-content');['mc-angulo','mc-formato','mc-hook','mc-guion','mc-cta'].forEach(id=>document.getElementById(id).value='');renderCal();toast('Pieza agregada');}
+function openHM(){document.getElementById('mh-fecha').value=new Date().toISOString().split('T')[0];openM('modal-hist');}
+function saveHist(){const it={fecha:document.getElementById('mh-fecha').value,angulo:document.getElementById('mh-angulo').value.trim(),tipo:document.getElementById('mh-tipo').value,formato:document.getElementById('mh-formato').value.trim(),hook:document.getElementById('mh-hook').value.trim(),guion:document.getElementById('mh-guion').value.trim(),cta:document.getElementById('mh-cta').value.trim(),estado:document.getElementById('mh-estado').value};if(!it.angulo)return;S.hists.push(it);sv(K.hists,S.hists);closeM('modal-hist');['mh-angulo','mh-formato','mh-hook','mh-guion','mh-cta'].forEach(id=>document.getElementById(id).value='');renderCal();toast('Historia agregada');}
 function setCF(f,el){cf=f;document.querySelectorAll('#cal-filter .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderCal();}
 function setCT(f,el){ct=f;document.querySelectorAll('#cal-time .ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderCal();}
 function filterByTime(arr){
@@ -892,8 +892,8 @@ function renderCal(){
 }
 
 // REFERENTES
-function openCompM(){openM('m-comp');}
-function saveComp(){const it={nombre:document.getElementById('co-nombre').value.trim(),ig:document.getElementById('co-ig').value.trim(),segs:document.getElementById('co-segs').value,nicho:document.getElementById('co-nicho').value.trim(),recolectar:document.getElementById('co-recolectar').value.trim(),eng:document.getElementById('co-eng').value,lastpost:document.getElementById('co-lastpost').value};if(!it.nombre)return;S.comps.push(it);sv(K.comps,S.comps);closeM('m-comp');['co-nombre','co-ig','co-segs','co-nicho','co-recolectar','co-eng','co-lastpost'].forEach(id=>document.getElementById(id).value='');renderComps();toast('Referente agregado');}
+function openCompM(){openM('modal-comp');}
+function saveComp(){const it={nombre:document.getElementById('co-nombre').value.trim(),ig:document.getElementById('co-ig').value.trim(),segs:document.getElementById('co-segs').value,nicho:document.getElementById('co-nicho').value.trim(),recolectar:document.getElementById('co-recolectar').value.trim(),eng:document.getElementById('co-eng').value,lastpost:document.getElementById('co-lastpost').value};if(!it.nombre)return;S.comps.push(it);sv(K.comps,S.comps);closeM('modal-comp');['co-nombre','co-ig','co-segs','co-nicho','co-recolectar','co-eng','co-lastpost'].forEach(id=>document.getElementById(id).value='');renderComps();toast('Referente agregado');}
 function renderComps(){
   const list=document.getElementById('comp-list');
   if(S.comps.length===0){list.innerHTML='<div style="color:var(--t3);text-align:center;padding:28px 0">Sin referentes.</div>';return;}
@@ -902,8 +902,8 @@ function renderComps(){
 }
 
 // METRICAS
-function openMetM(){document.getElementById('mm-fecha').value=new Date().toISOString().split('T')[0];openM('m-met');}
-function saveMet(){const it={fecha:document.getElementById('mm-fecha').value,tipo:document.getElementById('mm-tipo').value,angulo:document.getElementById('mm-angulo').value.trim(),cta:document.getElementById('mm-cta').value.trim(),comments:Number(document.getElementById('mm-comments').value)||0,segs:Number(document.getElementById('mm-segs').value)||0,leads:Number(document.getElementById('mm-leads').value)||0,ventas:document.getElementById('mm-ventas').value.trim(),primer:document.getElementById('mm-primer').value.trim(),ultimo:document.getElementById('mm-ultimo').value.trim()};if(!it.angulo)return;S.mets.push(it);sv(K.mets,S.mets);closeM('m-met');['mm-angulo','mm-cta','mm-comments','mm-segs','mm-leads','mm-ventas','mm-primer','mm-ultimo'].forEach(id=>document.getElementById(id).value='');renderMets();toast('Métrica cargada');}
+function openMetM(){document.getElementById('mm-fecha').value=new Date().toISOString().split('T')[0];openM('modal-met');}
+function saveMet(){const it={fecha:document.getElementById('mm-fecha').value,tipo:document.getElementById('mm-tipo').value,angulo:document.getElementById('mm-angulo').value.trim(),cta:document.getElementById('mm-cta').value.trim(),comments:Number(document.getElementById('mm-comments').value)||0,segs:Number(document.getElementById('mm-segs').value)||0,leads:Number(document.getElementById('mm-leads').value)||0,ventas:document.getElementById('mm-ventas').value.trim(),primer:document.getElementById('mm-primer').value.trim(),ultimo:document.getElementById('mm-ultimo').value.trim()};if(!it.angulo)return;S.mets.push(it);sv(K.mets,S.mets);closeM('modal-met');['mm-angulo','mm-cta','mm-comments','mm-segs','mm-leads','mm-ventas','mm-primer','mm-ultimo'].forEach(id=>document.getElementById(id).value='');renderMets();toast('Métrica cargada');}
 function renderMets(){
   const topAngulo=S.mets.length>0?S.mets.reduce((a,b)=>b.ventas.length>a.ventas.length?b:a).angulo:'—';
   const totSegs=S.mets.reduce((s,m)=>s+m.segs,0);
@@ -917,16 +917,16 @@ function renderMets(){
 }
 
 // LEADS
-function openLeadM(){openM('m-lead');}
-function saveLead(){const it={nombre:document.getElementById('ll-nombre').value.trim(),origen:document.getElementById('ll-origen').value,estado:document.getElementById('ll-estado').value,accion:document.getElementById('ll-accion').value.trim(),notas:document.getElementById('ll-notas').value.trim(),fecha:new Date().toLocaleDateString('es-AR')};if(!it.nombre)return;S.leads.push(it);sv(K.leads,S.leads);closeM('m-lead');['ll-nombre','ll-accion','ll-notas'].forEach(id=>document.getElementById(id).value='');renderLeads();toast('Lead agregado');}
+function openLeadM(){openM('modal-lead');}
+function saveLead(){const it={nombre:document.getElementById('ll-nombre').value.trim(),origen:document.getElementById('ll-origen').value,estado:document.getElementById('ll-estado').value,accion:document.getElementById('ll-accion').value.trim(),notas:document.getElementById('ll-notas').value.trim(),fecha:new Date().toLocaleDateString('es-AR')};if(!it.nombre)return;S.leads.push(it);sv(K.leads,S.leads);closeM('modal-lead');['ll-nombre','ll-accion','ll-notas'].forEach(id=>document.getElementById(id).value='');renderLeads();toast('Lead agregado');}
 function renderLeads(){
   const sc={Nuevo:'bgy',Contactado:'bb',Agendado:'bg',Seguimiento:'ba',Cerrado:'bgr',Perdido:'br'};
   document.getElementById('leads-table').innerHTML=S.leads.length===0?'<tr><td colspan="6" style="color:var(--t3);text-align:center;padding:18px 0">Sin leads.</td></tr>':S.leads.map((l,i)=>`<tr><td style="font-weight:700">${l.nombre}</td><td style="color:var(--t2)">${l.origen}</td><td><span class="badge ${sc[l.estado]||'bgy'}">${l.estado}</span></td><td style="font-size:11px;color:var(--t2)">${l.accion||'—'}</td><td style="font-size:11px;color:var(--t2);max-width:140px">${l.notas||'—'}</td><td><button class="btn btnd" onclick="delItem('leads',${i})" style="font-size:9px;padding:2px 6px">×</button></td></tr>`).join('');
 }
 
 // CLIENTES
-function openCliM(){document.getElementById('cl-inicio').value=new Date().toISOString().split('T')[0];openM('m-cli');}
-function saveCli(){const it={nombre:document.getElementById('cl-nombre').value.trim(),inicio:document.getElementById('cl-inicio').value,fin:document.getElementById('cl-fin').value,pp:document.getElementById('cl-pp').value,modal:document.getElementById('cl-modal').value,proxpago:document.getElementById('cl-proxpago').value,estado:document.getElementById('cl-estado').value,proxpaso:document.getElementById('cl-proxpaso').value.trim(),roadmap:document.getElementById('cl-roadmap').value.trim(),fecha:new Date().toLocaleDateString('es-AR')};if(!it.nombre)return;S.clients.push(it);sv(K.clients,S.clients);closeM('m-cli');['cl-nombre','cl-proxpaso','cl-roadmap'].forEach(id=>document.getElementById(id).value='');renderClis();toast('Cliente agregado');}
+function openCliM(){document.getElementById('cl-inicio').value=new Date().toISOString().split('T')[0];openM('modal-cli');}
+function saveCli(){const it={nombre:document.getElementById('cl-nombre').value.trim(),inicio:document.getElementById('cl-inicio').value,fin:document.getElementById('cl-fin').value,pp:document.getElementById('cl-pp').value,modal:document.getElementById('cl-modal').value,proxpago:document.getElementById('cl-proxpago').value,estado:document.getElementById('cl-estado').value,proxpaso:document.getElementById('cl-proxpaso').value.trim(),roadmap:document.getElementById('cl-roadmap').value.trim(),fecha:new Date().toLocaleDateString('es-AR')};if(!it.nombre)return;S.clients.push(it);sv(K.clients,S.clients);closeM('modal-cli');['cl-nombre','cl-proxpaso','cl-roadmap'].forEach(id=>document.getElementById(id).value='');renderClis();toast('Cliente agregado');}
 function renderClis(){
   const sc={'Al día':'bgr',Pendiente:'bg',Vencido:'br',Inactivo:'bgy'};
   document.getElementById('cli-lbl').textContent=S.clients.length+' clientes en programa';
@@ -934,10 +934,10 @@ function renderClis(){
 }
 
 // FINANZAS
-function openIngM(){document.getElementById('ing-fecha').value=new Date().toISOString().split('T')[0];openM('m-ing');}
-function saveIng(){const it={concepto:document.getElementById('ing-concepto').value,fecha:document.getElementById('ing-fecha').value,tipo:document.getElementById('ing-tipo').value,usd:document.getElementById('ing-usd').value,ars:document.getElementById('ing-ars').value,eur:document.getElementById('ing-eur').value};S.ing.push(it);sv(K.ing,S.ing);closeM('m-ing');['ing-usd','ing-ars','ing-eur'].forEach(id=>document.getElementById(id).value='');renderFin();toast('Ingreso registrado');}
-function openGasM(){document.getElementById('gas-fecha').value=new Date().toISOString().split('T')[0];openM('m-gas');}
-function saveGas(){const it={concepto:document.getElementById('gas-concepto').value.trim(),fecha:document.getElementById('gas-fecha').value,tipo:document.getElementById('gas-tipo').value,usd:document.getElementById('gas-usd').value,ars:document.getElementById('gas-ars').value,eur:document.getElementById('gas-eur').value,cat:document.getElementById('gas-cat').value};if(!it.concepto)return;S.gas.push(it);sv(K.gas,S.gas);closeM('m-gas');['gas-concepto','gas-usd','gas-ars','gas-eur'].forEach(id=>document.getElementById(id).value='');renderFin();toast('Egreso registrado');}
+function openIngM(){document.getElementById('ing-fecha').value=new Date().toISOString().split('T')[0];openM('modal-ing');}
+function saveIng(){const it={concepto:document.getElementById('ing-concepto').value,fecha:document.getElementById('ing-fecha').value,tipo:document.getElementById('ing-tipo').value,usd:document.getElementById('ing-usd').value,ars:document.getElementById('ing-ars').value,eur:document.getElementById('ing-eur').value};S.ing.push(it);sv(K.ing,S.ing);closeM('modal-ing');['ing-usd','ing-ars','ing-eur'].forEach(id=>document.getElementById(id).value='');renderFin();toast('Ingreso registrado');}
+function openGasM(){document.getElementById('gas-fecha').value=new Date().toISOString().split('T')[0];openM('modal-gas');}
+function saveGas(){const it={concepto:document.getElementById('gas-concepto').value.trim(),fecha:document.getElementById('gas-fecha').value,tipo:document.getElementById('gas-tipo').value,usd:document.getElementById('gas-usd').value,ars:document.getElementById('gas-ars').value,eur:document.getElementById('gas-eur').value,cat:document.getElementById('gas-cat').value};if(!it.concepto)return;S.gas.push(it);sv(K.gas,S.gas);closeM('modal-gas');['gas-concepto','gas-usd','gas-ars','gas-eur'].forEach(id=>document.getElementById(id).value='');renderFin();toast('Egreso registrado');}
 function renderFin(){
   const ti=S.ing.reduce((s,i)=>s+Number(i.usd||0),0);
   const tg=S.gas.reduce((s,g)=>s+Number(g.usd||0),0);
@@ -992,7 +992,7 @@ function importData(e){
 
 // ÁNGULOS
 let angPrimer=[],angUltimo=[];
-function openAngM(){angPrimer=[];angUltimo=[];document.getElementById('ang-primer-list').innerHTML='';document.getElementById('ang-ultimo-list').innerHTML='';document.getElementById('ang-angulo').value='';document.getElementById('ang-primer-inp').value='';document.getElementById('ang-ultimo-inp').value='';openM('m-ang');}
+function openAngM(){angPrimer=[];angUltimo=[];document.getElementById('ang-primer-list').innerHTML='';document.getElementById('ang-ultimo-list').innerHTML='';document.getElementById('ang-angulo').value='';document.getElementById('ang-primer-inp').value='';document.getElementById('ang-ultimo-inp').value='';openM('modal-ang');}
 function addAngContact(tipo){
   const inp=document.getElementById('ang-'+tipo+'-inp');
   const val=inp.value.trim();if(!val)return;
@@ -1011,7 +1011,7 @@ document.getElementById('ang-ultimo-inp').addEventListener('keydown',e=>{if(e.ke
 function saveAng(){
   const it={angulo:document.getElementById('ang-angulo').value.trim(),tipo:document.getElementById('ang-tipo').value,primer:[...angPrimer],ultimo:[...angUltimo],ad:document.getElementById('ang-ad').value,fecha:new Date().toLocaleDateString('es-AR')};
   if(!it.angulo)return;
-  S.angulos.push(it);sv(K.angulos,S.angulos);closeM('m-ang');renderAngulos();toast('Ángulo agregado');
+  S.angulos.push(it);sv(K.angulos,S.angulos);closeM('modal-ang');renderAngulos();toast('Ángulo agregado');
 }
 function renderAngulos(){
   // Top ventas: cruzar con métricas
